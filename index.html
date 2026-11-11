@@ -72,14 +72,12 @@
                             <option value="4-4-2">4-4-2</option>
                             <option value="4-2-3-1">4-2-3-1</option>
                             <option value="4-1-2-3">4-1-2-3</option>
-                            <option value="5-2-1-2">5-2-1-2</option>
-                            <option value="4-1-2-1-2">4-1-2-1-2 (ダイヤモンド)</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- ピッチグラフィック -->
-                <div id="pitch-container" class="relative bg-emerald-900/40 border border-emerald-600/30 rounded-xl p-4 sm:p-6 h-[500px] flex flex-col justify-between items-center overflow-hidden mb-6">
+                <div id="pitch-container" class="relative bg-emerald-900/40 border border-emerald-600/30 rounded-xl p-4 sm:p-6 h-[480px] flex flex-col justify-between items-center overflow-hidden mb-6">
                     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-800/20 via-transparent to-black/40 pointer-events-none"></div>
                     <div id="formation-rows" class="w-full h-full flex flex-col justify-between z-10 py-2"></div>
                 </div>
@@ -108,14 +106,12 @@
         <div id="view-players" class="space-y-8 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-club-accent" id="player-form-title">👤 新規選手登録 (顔写真トリミング対応)</h2>
+                    <h2 class="text-xl font-bold text-club-accent" id="player-form-title">👤 新規選手登録</h2>
                     <button type="button" onclick="resetPlayerForm()" id="cancel-player-edit" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">キャンセル</button>
                 </div>
 
                 <form id="player-reg-form" onsubmit="handlePlayerSubmit(event)" class="space-y-4">
                     <input type="hidden" id="edit-player-id" value="">
-                    <input type="hidden" id="p-photo-base64" value="">
-                    
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">選手名</label>
@@ -135,30 +131,21 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">スマホの写真から顔写真を選ぶ（自動円形トリミング）</label>
-                            <input type="file" id="p-image-file" accept="image/*" onchange="processImageFile(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-club-accent file:text-slate-900 hover:file:bg-emerald-400 cursor-pointer">
+                            <label class="block text-xs text-slate-400 mb-1">顔写真 画像URL</label>
+                            <input type="url" id="p-photo" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="https://... (画像のURL)">
                         </div>
-                        <div class="flex items-center gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-                            <span class="text-xs text-slate-400">プレビュー:</span>
-                            <div id="photo-preview-container" class="w-12 h-12 rounded-full overflow-hidden border-2 border-club-accent bg-slate-800 flex items-center justify-center">
-                                <span class="text-[10px] text-slate-500">No Img</span>
-                            </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">エルゴラッソ風寸評・特徴</label>
+                            <input type="text" id="p-catchphrase" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 圧倒的な決定力を誇る絶対的ストライカー">
                         </div>
                     </div>
-
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">エルゴラッソ風寸評・特徴</label>
-                        <input type="text" id="p-catchphrase" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 圧倒的な決定力を誇る絶対的ストライカー">
-                    </div>
-
                     <button type="submit" id="player-submit-btn" class="w-full bg-club-accent text-slate-900 font-bold py-2.5 rounded-lg hover:bg-emerald-400 transition">選手を登録する</button>
                 </form>
             </div>
 
-            <!-- 登録選手リスト -->
+            <!-- 登録選手リスト (編集・削除用) -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <h2 class="text-lg font-bold mb-4">📋 登録選手一覧（管理）</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="admin-player-list"></div>
@@ -208,8 +195,6 @@
                                 <option value="4-4-2">4-4-2</option>
                                 <option value="4-2-3-1">4-2-3-1</option>
                                 <option value="4-1-2-3">4-1-2-3</option>
-                                <option value="5-2-1-2">5-2-1-2</option>
-                                <option value="4-1-2-1-2">4-1-2-1-2 (ダイヤモンド)</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lineup-selectors"></div>
@@ -251,20 +236,18 @@
             "3-4-2-1": { rows: [{ label: "FW", keys: ["fw"] }, { label: "OM", keys: ["om1", "om2"] }, { label: "MF", keys: ["mf1", "mf2", "mf3", "mf4"] }, { label: "DF", keys: ["df1", "df2", "df3"] }, { label: "GK", keys: ["gk"] }] },
             "4-4-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "MF", keys: ["mf1", "mf2", "mf3", "mf4"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
             "4-2-3-1": { rows: [{ label: "FW", keys: ["fw"] }, { label: "OM", keys: ["om1", "om2", "om3"] }, { label: "DM", keys: ["dm1", "dm2"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
-            "4-1-2-3": { rows: [{ label: "FW", keys: ["fw1", "fw2", "fw3"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
-            "5-2-1-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "OM", keys: ["om"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4", "df5"] }, { label: "GK", keys: ["gk"] }] },
-            "4-1-2-1-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "OM", keys: ["om"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] }
+            "4-1-2-3": { rows: [{ label: "FW", keys: ["fw1", "fw2", "fw3"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] }
         };
 
         let currentFormation = "3-4-2-1";
         let currentLineup = { fw: 9, om1: 8, om2: 10, mf1: 5, mf2: 6, mf3: 3, mf4: 7, df1: 2, df2: 4, df3: 11, gk: 1 };
-        let currentBench = [12, 13, 3, 4, 1, 2, 6];
+        let currentBench = [12, 13, 3, 4, 1, 2, 6]; // 7枠
 
-        let players = JSON.parse(localStorage.getItem('club_players_v4')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v4') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v4')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v4')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v4')) || [];
+        let players = JSON.parse(localStorage.getItem('club_players_v3')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v3') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v3')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v3')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v3')) || [];
 
         function switchTab(tab) {
             document.getElementById('view-fan').classList.add('hidden');
@@ -291,7 +274,7 @@
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v4', formation);
+            localStorage.setItem('club_formation_v3', formation);
             document.getElementById('tactics-formation-select').value = formation;
             renderPitch();
         }
@@ -300,6 +283,7 @@
             document.getElementById('tactics-formation-select').value = formation;
             renderPitch();
 
+            // ベンチメンバー (7名)
             const benchContainer = document.getElementById('bench-list-container');
             benchContainer.innerHTML = '';
             bench.forEach(id => {
@@ -317,6 +301,7 @@
                 }
             });
 
+            // 試合履歴
             const historyContainer = document.getElementById('match-history-container');
             historyContainer.innerHTML = '';
             if (historyData.length === 0) {
@@ -349,6 +334,7 @@
                 });
             }
 
+            // 選手名鑑
             const container = document.getElementById('player-list-container');
             container.innerHTML = '';
             players.forEach(p => {
@@ -390,10 +376,10 @@
                     const p = players.find(x => x.id == pId);
                     if (p) {
                         rowHtml += `
-                            <div class="flex flex-col items-center bg-slate-900/90 border border-emerald-500/50 px-2 py-1 rounded-xl shadow-lg">
-                                <img src="${p.photo}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-emerald-400 mb-1">
-                                <span class="text-[8px] sm:text-[9px] text-club-accent font-bold">#${p.number}</span>
-                                <span class="text-[10px] sm:text-xs font-bold text-white whitespace-nowrap">${p.name.split(' ')[0]}</span>
+                            <div class="flex flex-col items-center bg-slate-900/90 border border-emerald-500/50 px-2.5 py-1.5 rounded-xl shadow-lg">
+                                <img src="${p.photo}" class="w-8 h-8 rounded-full object-cover border border-emerald-400 mb-1">
+                                <span class="text-[9px] text-club-accent font-bold">#${p.number}</span>
+                                <span class="text-xs font-bold text-white whitespace-nowrap">${p.name.split(' ')[0]}</span>
                             </div>
                         `;
                     }
@@ -401,39 +387,6 @@
                 rowHtml += `</div>`;
                 container.innerHTML += rowHtml;
             });
-        }
-
-        // --- 画像ファイル選択 & 円形トリミング処理 ---
-        function processImageFile(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const size = Math.min(img.width, img.height);
-                        canvas.width = 150;
-                        canvas.height = 150;
-                        const ctx = canvas.getContext('2d');
-
-                        // 中央正方形で切り抜いて円形マスク処理
-                        ctx.beginPath();
-                        ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
-                        ctx.closePath();
-                        ctx.clip();
-
-                        const offsetX = (img.width - size) / 2;
-                        const offsetY = (img.height - size) / 2;
-                        ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, 150, 150);
-
-                        const base64Data = canvas.toDataURL('image/jpeg', 0.85);
-                        document.getElementById('p-photo-base64').value = base64Data;
-                        document.getElementById('photo-preview-container').innerHTML = `<img src="${base64Data}" class="w-full h-full object-cover">`;
-                    }
-                    img.src = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
         }
 
         // --- 選手登録・管理ロジック ---
@@ -465,8 +418,8 @@
             const name = document.getElementById('p-name').value;
             const number = Number(document.getElementById('p-number').value);
             const pos = document.getElementById('p-pos').value;
+            const photo = document.getElementById('p-photo').value;
             const catchphrase = document.getElementById('p-catchphrase').value;
-            let photo = document.getElementById('p-photo-base64').value;
 
             if (editId) {
                 const p = players.find(x => x.id == editId);
@@ -474,18 +427,15 @@
                     p.name = name;
                     p.number = number;
                     p.pos = pos;
-                    if (photo) p.photo = photo; // 画像が再選択されていれば更新
+                    p.photo = photo;
                     p.catchphrase = catchphrase;
                 }
             } else {
-                if (!photo) {
-                    photo = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"; // デフォルト
-                }
                 const newId = players.length > 0 ? Math.max(...players.map(x => x.id)) + 1 : 1;
                 players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, catchphrase });
             }
 
-            localStorage.setItem('club_players_v4', JSON.stringify(players));
+            localStorage.setItem('club_players_v3', JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
@@ -498,9 +448,8 @@
             document.getElementById('p-name').value = p.name;
             document.getElementById('p-number').value = p.number;
             document.getElementById('p-pos').value = p.pos;
+            document.getElementById('p-photo').value = p.photo;
             document.getElementById('p-catchphrase').value = p.catchphrase || '';
-            document.getElementById('p-photo-base64').value = p.photo;
-            document.getElementById('photo-preview-container').innerHTML = `<img src="${p.photo}" class="w-full h-full object-cover">`;
             document.getElementById('player-form-title').innerText = "👤 選手情報の編集";
             document.getElementById('player-submit-btn').innerText = "変更を保存する";
             document.getElementById('cancel-player-edit').classList.remove('hidden');
@@ -509,9 +458,7 @@
         function resetPlayerForm() {
             document.getElementById('edit-player-id').value = "";
             document.getElementById('player-reg-form').reset();
-            document.getElementById('p-photo-base64').value = "";
-            document.getElementById('photo-preview-container').innerHTML = `<span class="text-[10px] text-slate-500">No Img</span>`;
-            document.getElementById('player-form-title').innerText = "👤 新規選手登録 (顔写真トリミング対応)";
+            document.getElementById('player-form-title').innerText = "👤 新規選手登録";
             document.getElementById('player-submit-btn').innerText = "選手を登録する";
             document.getElementById('cancel-player-edit').classList.add('hidden');
         }
@@ -519,7 +466,7 @@
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v4', JSON.stringify(players));
+                localStorage.setItem('club_players_v3', JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
@@ -530,6 +477,7 @@
             selectEl.value = formation;
             updateLineupSelectors(formation);
 
+            // ベンチメンバー選択 (7枠)
             const benchContainer = document.getElementById('bench-selectors');
             benchContainer.innerHTML = '';
             for (let i = 0; i < 7; i++) {
@@ -607,7 +555,7 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v4', JSON.stringify(historyData));
+                localStorage.setItem('club_history_v3', JSON.stringify(historyData));
                 recalculatePlayerGoals();
                 renderFanSite();
             }
@@ -621,7 +569,7 @@
                     if (pObj) pObj.goals += 1;
                 });
             });
-            localStorage.setItem('club_players_v4', JSON.stringify(players));
+            localStorage.setItem('club_players_v3', JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
@@ -638,7 +586,7 @@
 
             const formData = new FormData(event.target);
             formation = adminFormSelect;
-            localStorage.setItem('club_formation_v4', formation);
+            localStorage.setItem('club_formation_v3', formation);
 
             const template = formationTemplates[formation];
             template.rows.forEach(row => {
@@ -667,9 +615,9 @@
             }
 
             recalculatePlayerGoals();
-            localStorage.setItem('club_lineup_v4', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v4', JSON.stringify(bench));
-            localStorage.setItem('club_history_v4', JSON.stringify(historyData));
+            localStorage.setItem('club_lineup_v3', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v3', JSON.stringify(bench));
+            localStorage.setItem('club_history_v3', JSON.stringify(historyData));
 
             alert('試合データを保存しました！');
             resetMatchForm();
