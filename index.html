@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -44,7 +44,6 @@
 
         <!-- ==================== ファンサイト・ホームビュー ==================== -->
         <div id="view-fan" class="space-y-8">
-            <!-- ヒーロー / 次節情報 -->
             <div class="bg-gradient-to-r from-purple-950 to-club-card rounded-2xl p-6 border border-purple-500/30 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
                     <span class="bg-purple-500/20 text-purple-300 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH (J1 第36節)</span>
@@ -113,15 +112,14 @@
             </div>
         </div>
 
-        <!-- ==================== 選手名鑑ビュー (新設タブ) ==================== -->
+        <!-- ==================== 選手名鑑ビュー ==================== -->
         <div id="view-directory" class="space-y-6 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <div>
                         <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📖</span> 京都サンガF.C. 選手名鑑</h2>
-                        <p class="text-xs text-slate-400 mt-1">今季を戦い抜くトップチーム登録全選手のプロフィール＆スタッツ一覧。</p>
+                        <p class="text-xs text-slate-400 mt-1">カードをタップすると、公式HP風の詳細プロフィールやキャリア成績を確認できます。</p>
                     </div>
-                    <!-- ポジション絞り込みフィルター -->
                     <div class="flex gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
                         <button onclick="filterDirectory('ALL')" id="dir-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition">全員</button>
                         <button onclick="filterDirectory('GK')" id="dir-gk" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">GK</button>
@@ -131,10 +129,7 @@
                     </div>
                 </div>
 
-                <!-- 選手カードグリッド -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="directory-grid">
-                    <!-- 動的生成 -->
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="directory-grid"></div>
             </div>
         </div>
 
@@ -155,18 +150,19 @@
         <div id="view-players" class="space-y-8 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-purple-400" id="player-form-title">👤 新規選手登録・編集</h2>
+                    <h2 class="text-xl font-bold text-purple-400" id="player-form-title">👤 新規選手登録・詳細編集</h2>
                     <button type="button" onclick="resetPlayerForm()" id="cancel-player-edit" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">キャンセル</button>
                 </div>
 
                 <form id="player-reg-form" onsubmit="handlePlayerSubmit(event)" class="space-y-4">
                     <input type="hidden" id="edit-player-id" value="">
                     <input type="hidden" id="p-photo-base64" value="">
+                    <input type="hidden" id="p-career-base64" value="">
                     
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">選手名</label>
-                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 米倉 滉生">
+                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 太田 岳志">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">背番号</label>
@@ -185,7 +181,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">スマホの写真から顔写真を選ぶ（自動円形トリミング）</label>
+                            <label class="block text-xs text-slate-400 mb-1">顔写真を選ぶ（自動円形トリミング）</label>
                             <input type="file" id="p-image-file" accept="image/*" onchange="processImageFile(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
                         </div>
                         <div class="flex items-center gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
@@ -193,6 +189,15 @@
                             <div id="photo-preview-container" class="w-12 h-12 rounded-full overflow-hidden border-2 border-purple-500 bg-slate-800 flex items-center justify-center">
                                 <span class="text-[10px] text-slate-500">No Img</span>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- キャリア成績画像アップロード枠 -->
+                    <div class="border-t border-slate-800 pt-4 space-y-2">
+                        <label class="block text-xs font-bold text-purple-400">📈 キャリア成績表の画像（スクショ等をそのまま貼る）</label>
+                        <input type="file" id="p-career-file" accept="image/*" onchange="processCareerImage(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+                        <div id="career-preview-container" class="mt-2 w-full h-40 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden flex items-center justify-center">
+                            <span class="text-xs text-slate-500">キャリア画像未登録</span>
                         </div>
                     </div>
 
@@ -290,11 +295,21 @@
 
     </main>
 
+    <!-- ==================== 選手詳細ポップアップ (モーダル) ==================== -->
+    <div id="player-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-club-card border border-purple-500/40 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 relative shadow-2xl my-8">
+            <button onclick="closePlayerModal()" class="absolute top-6 right-6 bg-slate-800 hover:bg-slate-700 text-slate-300 w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition">✕</button>
+            
+            <div id="modal-content" class="space-y-6">
+                <!-- 動的生成 -->
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 京都サンガF.C. 22名 初期登録データ
         const defaultPlayers = [
-            { id: 1, name: "米倉 滉生", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
-            { id: 2, name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
+            { id: 1, name: "太田 岳志", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
+            { id: 2, name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
             { id: 3, name: "鈴木 翔司", number: 3, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "堅実なディフェンスと正確なビルドアップで貢献するDF。" },
             { id: 4, name: "前川 源基", number: 5, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "空中戦の強さと闘志あふれるタックルでピンチを防ぐファイター。" },
             { id: 5, name: "三嶋 泰詩", number: 6, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "冷静な読みと機動力でサイドを封鎖するサイドアタッカー兼任DF。" },
@@ -330,18 +345,17 @@
         let currentLineup = { fw: 6, om1: 8, om2: 14, mf1: 7, mf2: 10, mf3: 19, mf4: 9, df1: 2, df2: 4, df3: 3, gk: 1 };
         let currentBench = [11, 12, 13, 15, 16, 17, 18];
 
-        let players = JSON.parse(localStorage.getItem('club_players_v10')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v10') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v10')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v10')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v10')) || [];
-        let socialFeed = JSON.parse(localStorage.getItem('club_social_v10')) || [
+        let players = JSON.parse(localStorage.getItem('club_players_v11')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v11') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v11')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v11')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v11')) || [];
+        let socialFeed = JSON.parse(localStorage.getItem('club_social_v11')) || [
             { type: 'official', author: '京都サンガF.C. 公式', tag: '公式', time: '1時間前', text: '本日のJ1第36節 川崎フロンターレ戦のスターティングイレブンを発表！', likes: 1408, comments: 13 },
             { type: 'player', author: '鶴田 俊哉 (#99)', tag: '選手', time: '30分前', text: '絶対に勝つ。ピッチで躍動する姿を見てほしい！', likes: 890, comments: 24 },
             { type: 'fan', author: 'サンガ魂のサポ', tag: 'ファン', time: '10分前', text: '今日のスタメン熱すぎんだろ…！勝利を頼むぞ！', likes: 93, comments: 3 }
         ];
 
-        // タブ切り替え制御
         function switchTab(tab) {
             ['view-fan', 'view-directory', 'view-history', 'view-admin', 'view-players'].forEach(v => {
                 document.getElementById(v).classList.add('hidden');
@@ -375,7 +389,7 @@
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v10', formation);
+            localStorage.setItem('club_formation_v11', formation);
             renderFanSite();
         }
 
@@ -385,7 +399,7 @@
             renderSocialFeed('all');
         }
 
-        // 選手名鑑タブの描画（ポジションフィルター対応）
+        // 選手名鑑カード描画 (タップすると詳細モーダルが開く)
         function renderPlayerDirectory(posFilter) {
             ['dir-all', 'dir-gk', 'dir-df', 'dir-mf', 'dir-fw'].forEach(id => {
                 document.getElementById(id).className = "px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
@@ -398,7 +412,6 @@
 
             const grid = document.getElementById('directory-grid');
             grid.innerHTML = '';
-
             const targetPlayers = posFilter === 'ALL' ? players : players.filter(p => p.pos === posFilter);
 
             if (targetPlayers.length === 0) {
@@ -408,7 +421,7 @@
 
             targetPlayers.forEach(p => {
                 grid.innerHTML += `
-                    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+                    <div onclick="openPlayerModal(${p.id})" class="bg-slate-900/80 border border-slate-800 hover:border-purple-500/60 rounded-2xl p-5 flex flex-col justify-between shadow-xl cursor-pointer transition transform hover:-translate-y-1">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
@@ -424,9 +437,9 @@
                             </div>
                             <p class="text-xs text-slate-300 italic bg-slate-950/60 p-3 rounded-xl border-l-2 border-purple-500 mb-3">「${p.catchphrase || '特になし'}」</p>
                         </div>
-                        <div class="text-[10px] text-slate-400 flex justify-between border-t border-slate-800 pt-2.5">
-                            <span>SOFA RATING: <strong class="text-white">7.42</strong></span>
-                            <span class="text-emerald-400 font-semibold">好調</span>
+                        <div class="text-[10px] text-purple-400 font-bold flex justify-between border-t border-slate-800 pt-2.5">
+                            <span>詳細プロフィール・キャリアを見る →</span>
+                            <span>通算出場記録あり</span>
                         </div>
                     </div>
                 `;
@@ -437,7 +450,63 @@
             renderPlayerDirectory(pos);
         }
 
-        // 専用の「試合履歴」タブ
+        // 選手詳細モーダルを開く
+        function openPlayerModal(id) {
+            const p = players.find(x => x.id == id);
+            if (!p) return;
+
+            const modalContent = document.getElementById('modal-content');
+            let careerHtml = p.careerImg ? `<img src="${p.careerImg}" class="w-full rounded-xl border border-slate-700 shadow-md">` : `<p class="text-xs text-slate-500 text-center py-6 bg-slate-900/50 rounded-xl">キャリア成績の画像が未登録です。「選手編集」タブから登録できます。</p>`;
+
+            modalContent.innerHTML = `
+                <div class="flex items-center gap-4 border-b border-slate-800 pb-5">
+                    <img src="${p.photo}" class="w-20 h-20 rounded-full object-cover border-4 border-purple-500 shadow-xl">
+                    <div>
+                        <span class="bg-purple-500/20 text-purple-300 text-xs font-bold px-2.5 py-1 rounded">#${p.number} [${p.pos}]</span>
+                        <h2 class="text-2xl font-black text-white mt-1">${p.name}</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">京都サンガF.C. トップチーム</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+                        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider">プロフィール・寸評</h3>
+                        <p class="text-sm text-slate-200 italic">「${p.catchphrase || '特になし'}」</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                            <div>今季ゴール: <strong class="text-club-gold">${p.goals} G</strong></div>
+                            <div>今季アシスト: <strong class="text-emerald-400">${p.assists} A</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider">キャリア成績・出場記録</h3>
+                        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 overflow-x-auto">
+                            ${careerHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('player-modal').classList.remove('hidden');
+        }
+
+        function closePlayerModal() {
+            document.getElementById('player-modal').classList.add('hidden');
+        }
+
+        // 選手編集用のキャリア画像処理
+        function processCareerImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Data = e.target.result;
+                    document.getElementById('p-career-base64').value = base64Data;
+                    document.getElementById('career-preview-container').innerHTML = `<img src="${base64Data}" class="w-full h-full object-contain">`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function renderDedicatedHistory() {
             const container = document.getElementById('dedicated-history-container');
             container.innerHTML = '';
@@ -629,6 +698,7 @@
             const pos = document.getElementById('p-pos').value;
             const catchphrase = document.getElementById('p-catchphrase').value;
             let photo = document.getElementById('p-photo-base64').value;
+            let careerImg = document.getElementById('p-career-base64').value;
 
             if (editId) {
                 const p = players.find(x => x.id == editId);
@@ -637,6 +707,7 @@
                     p.number = number;
                     p.pos = pos;
                     if (photo) p.photo = photo;
+                    if (careerImg) p.careerImg = careerImg;
                     p.catchphrase = catchphrase;
                 }
             } else {
@@ -644,10 +715,10 @@
                     photo = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
                 }
                 const newId = players.length > 0 ? Math.max(...players.map(x => x.id)) + 1 : 1;
-                players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, catchphrase });
+                players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, careerImg, catchphrase });
             }
 
-            localStorage.setItem('club_players_v10', JSON.stringify(players));
+            localStorage.setItem('club_players_v11', JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
@@ -664,6 +735,14 @@
             document.getElementById('p-catchphrase').value = p.catchphrase || '';
             document.getElementById('p-photo-base64').value = p.photo;
             document.getElementById('photo-preview-container').innerHTML = `<img src="${p.photo}" class="w-full h-full object-cover">`;
+            
+            if (p.careerImg) {
+                document.getElementById('p-career-base64').value = p.careerImg;
+                document.getElementById('career-preview-container').innerHTML = `<img src="${p.careerImg}" class="w-full h-full object-contain">`;
+            } else {
+                document.getElementById('career-preview-container').innerHTML = `<span class="text-xs text-slate-500">キャリア画像未登録</span>`;
+            }
+
             document.getElementById('player-form-title').innerText = "👤 選手情報の編集";
             document.getElementById('player-submit-btn').innerText = "変更を保存する";
             document.getElementById('cancel-player-edit').classList.remove('hidden');
@@ -673,8 +752,10 @@
             document.getElementById('edit-player-id').value = "";
             document.getElementById('player-reg-form').reset();
             document.getElementById('p-photo-base64').value = "";
+            document.getElementById('p-career-base64').value = "";
             document.getElementById('photo-preview-container').innerHTML = `<span class="text-[10px] text-slate-500">No Img</span>`;
-            document.getElementById('player-form-title').innerText = "👤 新規選手登録・編集";
+            document.getElementById('career-preview-container').innerHTML = `<span class="text-xs text-slate-500">キャリア画像未登録</span>`;
+            document.getElementById('player-form-title').innerText = "👤 新規選手登録・詳細編集";
             document.getElementById('player-submit-btn').innerText = "選手データを保存する";
             document.getElementById('cancel-player-edit').classList.add('hidden');
         }
@@ -682,7 +763,7 @@
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v10', JSON.stringify(players));
+                localStorage.setItem('club_players_v11', JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
@@ -785,7 +866,7 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v10', JSON.stringify(historyData));
+                localStorage.setItem('club_history_v11', JSON.stringify(historyData));
                 recalculatePlayerStats();
                 renderFanSite();
                 renderDedicatedHistory();
@@ -804,7 +885,7 @@
                     }
                 });
             });
-            localStorage.setItem('club_players_v10', JSON.stringify(players));
+            localStorage.setItem('club_players_v11', JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
@@ -860,13 +941,13 @@
                     likes: 1,
                     comments: 0
                 });
-                localStorage.setItem('club_social_v10', JSON.stringify(socialFeed));
+                localStorage.setItem('club_social_v11', JSON.stringify(socialFeed));
             }
 
             recalculatePlayerStats();
-            localStorage.setItem('club_lineup_v10', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v10', JSON.stringify(bench));
-            localStorage.setItem('club_history_v10', JSON.stringify(historyData));
+            localStorage.setItem('club_lineup_v11', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v11', JSON.stringify(bench));
+            localStorage.setItem('club_history_v11', JSON.stringify(historyData));
 
             alert('試合データを保存しました！');
             resetMatchForm();
