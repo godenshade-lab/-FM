@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COYS United Official Hub & Admin</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0B0F19',
+                        cardbg: '#111827',
+                        bordercolor: '#1F2937',
+                        primary: '#10B981', /* 鮮やかなグリーン */
+                        accent: '#3B82F6'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .pitch-bg {
+            background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.05) 40px, rgba(255,255,255,0.05) 41px);
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-100 min-h-screen flex flex-col selection:bg-primary selection:text-white">
+
+    <!-- ナビゲーションバー -->
+    <header class="sticky top-0 z-50 bg-cardbg/90 backdrop-blur-md border-b border-bordercolor">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-xl shadow-lg shadow-emerald-900/30">
+                    C
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg tracking-wider bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">COYS UNITED</h1>
+                    <p class="text-xs text-gray-400 font-medium tracking-tight">Official Fan & Media Hub</p>
+                </div>
+            </div>
+
+            <!-- タブ切り替えボタン -->
+            <nav class="flex items-center space-x-2 bg-gray-900/80 p-1 rounded-xl border border-bordercolor">
+                <button onclick="switchTab('public')" id="btn-public" class="px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 bg-primary text-white shadow-md shadow-primary/30 flex items-center space-x-2">
+                    <i class="fa-solid fa-earth-americas"></i>
+                    <span>ファンサイト</span>
+                </button>
+                <button onclick="switchTab('admin')" id="btn-admin" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-gray-400 hover:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>管理者ダッシュボード</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ領域 -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ==================== パブリック向けサイト ==================== -->
+        <div id="tab-public" class="space-y-10">
+
+            <!-- 試合速報バナー -->
+            <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-bordercolor rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                    <div class="flex items-center space-x-4">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full uppercase tracking-wider border border-emerald-500/30 animate-pulse">
+                            <i class="fa-solid fa-circle text-[8px] mr-1"></i> 試合終了 (FT)
+                        </span>
+                        <span class="text-sm text-gray-400 font-medium">明治安田J1 第25節</span>
+                    </div>
+                    <div class="flex items-center space-x-6 text-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-bold text-lg">COYS</span>
+                            <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-white shadow">C</div>
+                        </div>
+                        <div class="text-3xl font-black tracking-widest px-4 py-1 bg-gray-950/60 rounded-xl border border-bordercolor">
+                            2 - 1
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-bold text-white shadow">T</div>
+                            <span class="font-bold text-lg">東京V</span>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-location-dot text-primary"></i>
+                        <span>国立競技場 (Att: 48,210)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- サブタブ（ファンサイト内） -->
+            <div class="flex border-b border-bordercolor space-x-8">
+                <button onclick="switchSubTab('lineup')" id="subbtn-lineup" class="pb-3 border-b-2 border-primary text-primary font-bold text-sm transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-chess-board"></i>
+                    <span>公式風スタメン発表</span>
+                </button>
+                <button onclick="switchSubTab('players')" id="subbtn-players" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>選手名鑑 (FotMob & エルゴラッソ風)</span>
+                </button>
+                <button onclick="switchSubTab('sns')" id="subbtn-sns" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-all flex items-center space-x-2">
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <span>SNS & ゴール速報タイムライン</span>
+                </button>
+            </div>
+
+            <!-- 1. スタメン発表セクション -->
+            <div id="subtab-lineup" class="space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold tracking-tight">STARTING XI / 3-4-2-1</h2>
+                        <p class="text-sm text-gray-400">直近の試合におけるスターティングフォーメーションと選手配置</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xs text-gray-400 bg-cardbg px-3 py-1.5 rounded-lg border border-bordercolor">システム: 3-4-2-1</span>
+                    </div>
+                </div>
+
+                <!-- ピッチグラフィック -->
+                <div class="pitch-bg rounded-2xl p-6 md:p-10 border border-emerald-500/30 shadow-2xl relative overflow-hidden min-h-[620px] flex flex-col justify-between">
+                    <!-- ピッチのセンターサークルなどを疑似的に表現 -->
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+                        <div class="w-96 h-96 rounded-full border-2 border-white"></div>
+                        <div class="absolute w-full h-[1px] bg-white"></div>
+                    </div>
+
+                    <!-- GK -->
+                    <div class="flex justify-center my-2">
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl w-36 text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">01</div>
+                            <div class="font-bold text-sm truncate">GK シュミット D.</div>
+                            <div class="text-[10px] text-gray-400">GK</div>
+                        </div>
+                    </div>
+
+                    <!-- CB (3枚) -->
+                    <div class="grid grid-cols-3 gap-2 my-2 max-w-2xl mx-auto w-full">
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">03</div>
+                            <div class="font-bold text-sm truncate">CB 谷口 彰悟</div>
+                            <div class="text-[10px] text-gray-400">LCB</div>
+                        </div>
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">04</div>
+                            <div class="font-bold text-sm truncate">CB 板倉 滉</div>
+                            <div class="text-[10px] text-gray-400">CCB</div>
+                        </div>
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">05</div>
+                            <div class="font-bold text-sm truncate">CB 冨安 健洋</div>
+                            <div class="text-[10px] text-gray-400">RCB</div>
+                        </div>
+                    </div>
+
+                    <!-- WB & DMF (4枚) -->
+                    <div class="grid grid-cols-4 gap-2 my-2 max-w-3xl mx-auto w-full">
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">02</div>
+                            <div class="font-bold text-sm truncate">WB 三笘 薫</div>
+                            <div class="text-[10px] text-gray-400">LWB</div>
+                        </div>
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">06</div>
+                            <div class="font-bold text-sm truncate">MF 遠藤 航</div>
+                            <div class="text-[10px] text-gray-400">LDMF</div>
+                        </div>
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">08</div>
+                            <div class="font-bold text-sm truncate">MF 守田 英正</div>
+                            <div class="text-[10px] text-gray-400">RDMF</div>
+                        </div>
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">07</div>
+                            <div class="font-bold text-sm truncate">WB 伊東 純也</div>
+                            <div class="text-[10px] text-gray-400">RWB</div>
+                        </div>
+                    </div>
+
+                    <!-- OMF (2枚) -->
+                    <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto w-full my-2">
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">10</div>
+                            <div class="font-bold text-sm truncate">MF 南野 拓実</div>
+                            <div class="text-[10px] text-gray-400">LAMF (MOM)</div>
+                        </div>
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">14</div>
+                            <div class="font-bold text-sm truncate">MF 久保 建英</div>
+                            <div class="text-[10px] text-gray-400">RAMF</div>
+                        </div>
+                    </div>
+
+                    <!-- CF (1枚) -->
+                    <div class="flex justify-center my-2">
+                        <div class="player-card bg-gray-900/90 backdrop-blur border border-bordercolor hover:border-primary transition-all p-3 rounded-xl w-36 text-center shadow-lg cursor-pointer group">
+                            <div class="w-10 h-10 mx-auto mb-1 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/30 group-hover:scale-105 transition-transform">09</div>
+                            <div class="font-bold text-sm truncate">FW 上田 綺世</div>
+                            <div class="text-[10px] text-gray-400">CF (エース)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 選手名鑑（FotMob風＆エルゴラッソ風）セクション -->
+            <div id="subtab-players" class="space-y-6 hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold tracking-tight">PLAYER DIRECTORY & STATS</h2>
+                        <p class="text-sm text-gray-400">管理者ダッシュボードの試合記録と自動連動する選手スタッツとエルゴラッソ風寸評</p>
+                    </div>
+                </div>
+
+                <!-- 選手カード一覧（動的描画） -->
+                <div id="players-directory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- JavaScriptで動的に挿入されます -->
+                </div>
+            </div>
+
+            <!-- 3. SNS＆タイムラインセクション -->
+            <div id="subtab-sns" class="space-y-6 hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold tracking-tight">MATCH TIMELINE & X FEED</h2>
+                        <p class="text-sm text-gray-400">試合のリアルタイム速報とファン・選手のSNS投稿風フィード</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 max-w-3xl mx-auto">
+                    <!-- ツイート風投稿 1 -->
+                    <div class="bg-cardbg border border-bordercolor rounded-2xl p-5 shadow-lg">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-400 flex items-center justify-center font-bold text-white shadow">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="font-bold text-sm">COYS公式速報 🇯🇵</span>
+                                        <i class="fa-solid fa-circle-check text-blue-400 text-xs"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-400">@COYS_Official_PR · 5分前</span>
+                                /></div>
+                            </div>
+                            <i class="fa-brands fa-x-twitter text-gray-400 text-lg"></i>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-gray-200">
+                            【GOAL!!!!!】後半12分、鮮やかな連動から抜け出した<span class="text-emerald-400 font-bold">南野 拓実</span>が冷静にネットを揺らし勝ち越し弾！スタジアム全体が緑の歓声に包まれる！ 2-1！！！ 🔥⚽️
+                        </p>
+                        <div class="mt-4 flex items-center space-x-6 text-gray-400 text-xs">
+                            <span class="flex items-center space-x-1.5 hover:text-red-400 cursor-pointer transition-colors"><i class="fa-regular fa-heart"></i> <span>1,428</span></span>
+                            <span class="flex items-center space-x-1.5 hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-regular fa-comment"></i> <span>210</span></span>
+                            <span class="flex items-center space-x-1.5 hover:text-green-400 cursor-pointer transition-colors"><i class="fa-solid fa-retweet"></i> <span>489</span></span>
+                        </div>
+                    </div>
+
+                    <!-- ツイート風投稿 2 -->
+                    <div class="bg-cardbg border border-bordercolor rounded-2xl p-5 shadow-lg">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-bold text-white shadow">
+                                    南
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="font-bold text-sm">南野 拓実 / Takumi Minamino</span>
+                                        <i class="fa-solid fa-circle-check text-blue-400 text-xs"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-400">@takumina0819 · 1時間前</span>
+                                </div>
+                            </div>
+                            <i class="fa-brands fa-x-twitter text-gray-400 text-lg"></i>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-gray-200">
+                            サポーターの皆さんの声援が最高のエネルギーになりました！次も勝てるよういい準備をします。応援ありがとうございました！💪🔥
+                        </p>
+                        <div class="mt-4 flex items-center space-x-6 text-gray-400 text-xs">
+                            <span class="flex items-center space-x-1.5 hover:text-red-400 cursor-pointer transition-colors"><i class="fa-regular fa-heart"></i> <span>8,920</span></span>
+                            <span class="flex items-center space-x-1.5 hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-regular fa-comment"></i> <span>340</span></span>
+                            <span class="flex items-center space-x-1.5 hover:text-green-400 cursor-pointer transition-colors"><i class="fa-solid fa-retweet"></i> <span>1,205</span></span>
+                        </div>
+                    </div>
+
+                    <!-- ツイート風投稿 3 -->
+                    <div class="bg-cardbg border border-bordercolor rounded-2xl p-5 shadow-lg">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-purple-600 to-pink-400 flex items-center justify-center font-bold text-white shadow">
+                                    サ
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="font-bold text-sm">COYSサポ@現地組</span>
+                                    </div>
+                                    <span class="text-xs text-gray-400">@coys_supporter · 2時間前</span>
+                                </div>
+                            </div>
+                            <i class="fa-brands fa-x-twitter text-gray-400 text-lg"></i>
+                        </div>
+                        <p class="mt-4 text-sm leading-relaxed text-gray-200">
+                            今日の遠藤航のセカンドボール回収えぐすぎ。中盤の底に絶対的な壁があった。MOM文句なしでタキだな！！最高すぎる週末ありがとう！！！ 🍻✨
+                        </p>
+                        <div class="mt-4 flex items-center space-x-6 text-gray-400 text-xs">
+                            <span class="flex items-center space-x-1.5 hover:text-red-400 cursor-pointer transition-colors"><i class="fa-regular fa-heart"></i> <span>412</span></span>
+                            <span class="flex items-center space-x-1.5 hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-regular fa-comment"></i> <span>12</span></span>
+                            <span class="flex items-center space-x-1.5 hover:text-green-400 cursor-pointer transition-colors"><i class="fa-solid fa-retweet"></i> <span>45</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== 管理者用ダッシュボード ==================== -->
+        <div id="tab-admin" class="space-y-8 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-bordercolor pb-6">
+                <div>
+                    <h2 class="text-2xl font-extrabold tracking-tight">ADMINISTRATION DASHBOARD</h2>
+                    <p class="text-sm text-gray-400">試合結果・個人スタッツの入力フォーム。送信するとファンサイト側の選手名鑑データに自動集計・反映されます。</p>
+                </div>
+                <button onclick="resetData()" class="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>データを初期値に戻す</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 試合記録入力フォーム -->
+                <div class="lg:col-span-1 bg-cardbg border border-bordercolor rounded-2xl p-6 shadow-xl space-y-6">
+                    <h3 class="text-lg font-bold flex items-center space-x-2 text-primary">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>新規試合・成績の記録</span>
+                    </h3>
+
+                    <form id="match-form" onsubmit="handleMatchSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">試合日</label>
+                            <input type="date" id="match-date" required class="w-full bg-gray-900 border border-bordercolor rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-primary">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">対戦相手</label>
+                            <input type="text" id="match-opponent" placeholder="例: 横浜F・マリノス" required class="w-full bg-gray-900 border border-bordercolor rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-primary">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">自チーム得点</label>
+                                <input type="number" id="match-gf" min="0" value="2" required class="w-full bg-gray-900 border border-bordercolor rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-primary">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">相手得点</label>
+                                <input type="number" id="match-ga" min="0" value="1" required class="w-full bg-gray-900 border border-bordercolor rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-primary">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">得点者を選択（複数選択可）</label>
+                            <div id="scorer-checkboxes" class="space-y-2 max-h-40 overflow-y-auto p-3 bg-gray-900 border border-bordercolor rounded-xl">
+                                <!-- JSで動的生成 -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">アシスト者を選択</label>
+                            <div id="assister-checkboxes" class="space-y-2 max-h-40 overflow-y-auto p-3 bg-gray-900 border border-bordercolor rounded-xl">
+                                <!-- JSで動的生成 -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">MOM (Man of the Match)</label>
+                            <select id="match-mom" class="w-full bg-gray-900 border border-bordercolor rounded-xl px-4 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-primary">
+                                <!-- JSで動的生成 -->
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>記録を登録して自動集計する</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 登録された試合履歴・集計状況 -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-cardbg border border-bordercolor rounded-2xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold flex items-center space-x-2 text-primary">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>試合記録データベース（最近の記録）</span>
+                        </h3>
+                        <div id="match-history-list" class="space-y-3">
+                            <!-- JSで動的生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-cardbg border-t border-bordercolor mt-16 py-8 text-center text-sm text-gray-500">
+        <p>&copy; 2026 COYS UNITED Official Fan & Media Hub. All rights reserved.</p>
+    </footer>
+
+    <!-- カスタムメッセージボックス (alertの代替) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-cardbg border border-bordercolor rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <div id="modal-icon" class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mx-auto border border-emerald-500/30">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4 id="modal-title" class="font-bold text-lg">完了</h4>
+            <p id="modal-text" class="text-sm text-gray-300"></p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-primary hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors">
+                閉じる
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript アプリケーションロジック -->
+    <script>
+        // 初期選手データ（エルゴラッソ風寸評 ＆ FotMob風レーティング・スタッツ含む）
+        const initialPlayers = [
+            { id: 1, name: "シュミット ダニエル", number: 1, pos: "GK", rating: 7.2, goals: 0, assists: 0, mom: 1, catchphrase: "「堅守の最後尾に君臨するセービング職人。鋭い読みと安定したコーチングで最終ラインに絶対的な安心感をもたらす」" },
+            { id: 2, name: "三笘 薫", number: 2, pos: "LWB", rating: 8.4, goals: 5, assists: 4, mom: 3, catchphrase: "「左サイドを切り裂く現代のドリブル芸術家。緩急自在の仕掛けで対面するディフェンダーを次々と絶望の淵へと追いやる」" },
+            { id: 3, name: "谷口 彰悟", number: 3, pos: "LCB", rating: 7.5, goals: 1, assists: 0, mom: 1, catchphrase: "「知性とリーダーシップで守備網を統率するインテリジェント・ディフェンダー。ピンチを未然に防ぐクレバーな対応が光る」" },
+            { id: 4, name: "板倉 滉", number: 4, pos: "CCB", rating: 7.8, goals: 2, assists: 1, mom: 2, catchphrase: "「対人強度の高さとビルドアップ能力を兼ね備えた現代型センターバック。最後尾からの正確なロングフィードで攻撃の起点となる」" },
+            { id: 5, name: "冨安 健洋", number: 5, pos: "RCB", rating: 8.1, goals: 1, assists: 1, mom: 2, catchphrase: "「圧倒的な対人無敗誇るユーティリティの要。完璧なポジショニングと両足遜色ない高精度なキックでチームを支える」" },
+            { id: 6, name: "遠藤 航", number: 6, pos: "LDMF", rating: 8.3, goals: 2, assists: 2, mom: 3, catchphrase: "「デュエルの鬼神。中盤の底でセージを総舐めにする圧倒的なボール奪取力と魂のコーチングでチームを鼓舞する闘将」" },
+            { id: 7, name: "伊東 純也", number: 7, pos: "RWB", rating: 8.5, goals: 6, assists: 7, mom: 4, catchphrase: "「ジェット機のごとき異次元の爆発的スプリント。右サイドを縦にぶち抜き、一瞬で決定機を演出するアジア屈指の仕掛け人」" },
+            { id: 8, name: "守田 英正", number: 8, pos: "RDMF", rating: 7.9, goals: 3, assists: 4, mom: 2, catchphrase: "「ピッチの指揮官。卓越した戦術眼とスムーズなターンで中盤のテンポを完全に支配し、攻守のリンクを円滑にする」" },
+            { id: 9, name: "上田 綺世", number: 9, pos: "CF", rating: 8.0, goals: 9, assists: 1, mom: 3, catchphrase: "「ゴール前での嗅覚は天下一品。強烈なシュートストロングと巧みな駆け引きでどんな状況でもネットを揺らすストライカー」" },
+            { id: 10, name: "南野 拓実", number: 10, pos: "LAMF", rating: 8.7, goals: 8, assists: 5, mom: 5, catchphrase: "「ゴールへの嗅覚とハードワークを極めたシャドーの使い手。絶妙なタイミングの飛び出しで幾度もチームを救う勝利の男」" },
+            { id: 11, name: "久保 建英", number: 11, pos: "RAMF", rating: 8.6, goals: 7, assists: 8, mom: 4, catchphrase: "「天才的なレフティー。変幻自在のドリブルと高精度なラストパスで相手守備ブロックを単独で崩壊させる至宝」" }
+        ];
+
+        // 初期試合履歴データ
+        const initialMatches = [
+            { id: 1, date: "2026-06-12", opponent: "東京V", gf: 2, ga: 1, scorers: ["南野 拓実"], assisters: ["久保 建英"], mom: "南野 拓実" },
+            { id: 2, date: "2026-06-05", opponent: "浦和レッズ", gf: 3, ga: 0, scorers: ["上田 綺世", "伊東 純也"], assisters: ["三笘 薫"], mom: "伊東 純也" }
+        ];
+
+        // LocalStorageからの読み込み、または初期値設定
+        let players = JSON.parse(localStorage.getItem('coys_players')) || initialPlayers;
+        let matches = JSON.parse(localStorage.getItem('coys_matches')) || initialMatches;
+
+        function saveData() {
+            localStorage.setItem('coys_players', JSON.stringify(players));
+            localStorage.setItem('coys_matches', JSON.stringify(matches));
+        }
+
+        function resetData() {
+            if (confirm("データを初期状態に戻しますか？")) {
+                players = JSON.parse(JSON.stringify(initialPlayers));
+                matches = JSON.parse(JSON.stringify(initialMatches));
+                saveData();
+                renderAll();
+                showModal("リセット完了", "データを初期値に復元しました。");
+            }
+        }
+
+        // タブ切り替え制御
+        function switchTab(tabName) {
+            const pubTab = document.getElementById('tab-public');
+            const adminTab = document.getElementById('tab-admin');
+            const btnPub = document.getElementById('btn-public');
+            const btnAdmin = document.getElementById('btn-admin');
+
+            if (tabName === 'public') {
+                pubTab.classList.remove('hidden');
+                adminTab.classList.add('hidden');
+                btnPub.className = "px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 bg-primary text-white shadow-md shadow-primary/30 flex items-center space-x-2";
+                btnAdmin.className = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-gray-400 hover:text-white flex items-center space-x-2";
+            } else {
+                pubTab.classList.add('hidden');
+                adminTab.classList.remove('hidden');
+                btnAdmin.className = "px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 bg-primary text-white shadow-md shadow-primary/30 flex items-center space-x-2";
+                btnPub.className = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-gray-400 hover:text-white flex items-center space-x-2";
+                renderAdminFormOptions();
+                renderMatchHistory();
+            }
+        }
+
+        // サブタブ切り替え制御（ファンサイト内）
+        function switchSubTab(subName) {
+            const lineup = document.getElementById('subtab-lineup');
+            const playersDiv = document.getElementById('subtab-players');
+            const sns = document.getElementById('subtab-sns');
+
+            const btnLineup = document.getElementById('subbtn-lineup');
+            const btnPlayers = document.getElementById('subbtn-players');
+            const btnSns = document.getElementById('subbtn-sns');
+
+            lineup.classList.add('hidden');
+            playersDiv.classList.add('hidden');
+            sns.classList.add('hidden');
+
+            btnLineup.className = "pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-all flex items-center space-x-2";
+            btnPlayers.className = "pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-all flex items-center space-x-2";
+            btnSns.className = "pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-all flex items-center space-x-2";
+
+            if (subName === 'lineup') {
+                lineup.classList.remove('hidden');
+                btnLineup.className = "pb-3 border-b-2 border-primary text-primary font-bold text-sm transition-all flex items-center space-x-2";
+            } else if (subName === 'players') {
+                playersDiv.classList.remove('hidden');
+                btnPlayers.className = "pb-3 border-b-2 border-primary text-primary font-bold text-sm transition-all flex items-center space-x-2";
+                renderPlayersDirectory();
+            } else if (subName === 'sns') {
+                sns.classList.remove('hidden');
+                btnSns.className = "pb-3 border-b-2 border-primary text-primary font-bold text-sm transition-all flex items-center space-x-2";
+            }
+        }
+
+        // 選手名鑑の描画（FotMob風 ＆ エルゴラッソ風）
+        function renderPlayersDirectory() {
+            const container = document.getElementById('players-directory-grid');
+            container.innerHTML = '';
+
+            players.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-cardbg border border-bordercolor rounded-2xl p-6 shadow-xl flex flex-col justify-between hover:border-primary/50 transition-all";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-black text-lg flex items-center justify-center">
+                                    ${p.number}
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-base">${p.name}</h3>
+                                    <span class="text-xs text-gray-400 font-semibold">${p.pos}</span>
+                                </div>
+                            </div>
+                            <!-- FotMob風レーティング -->
+                            <div class="text-center px-3 py-1.5 bg-gray-900 border border-bordercolor rounded-xl">
+                                <div class="text-[10px] text-gray-400 uppercase tracking-tight">Rating</div>
+                                <div class="font-black text-emerald-400 text-sm">${p.rating.toFixed(1)}</div>
+                            </div>
+                        </div>
+
+                        <!-- エルゴラッソ風寸評 -->
+                        <div class="bg-gray-900/80 border border-bordercolor/60 rounded-xl p-3.5 mb-4 text-xs italic text-gray-300 leading-relaxed">
+                            ${p.catchphrase}
+                        </div>
+
+                        <!-- スタッツグリッド (FotMob風) -->
+                        <div class="grid grid-cols-3 gap-2 text-center text-xs mb-2">
+                            <div class="bg-gray-900 p-2 rounded-xl border border-bordercolor">
+                                <span class="text-gray-400 block text-[10px]">ゴール</span>
+                                <span class="font-black text-white text-sm">${p.goals}</span>
+                            </div>
+                            <div class="bg-gray-900 p-2 rounded-xl border border-bordercolor">
+                                <span class="text-gray-400 block text-[10px]">アシスト</span>
+                                <span class="font-black text-white text-sm">${p.assists}</span>
+                            </div>
+                            <div class="bg-gray-900 p-2 rounded-xl border border-bordercolor">
+                                <span class="text-gray-400 block text-[10px]">MOM回数</span>
+                                <span class="font-black text-amber-400 text-sm">${p.mom}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 管理者フォームのチェックボックスやセレクトの構築
+        function renderAdminFormOptions() {
+            const scorerContainer = document.getElementById('scorer-checkboxes');
+            const assisterContainer = document.getElementById('assister-checkboxes');
+            const momSelect = document.getElementById('match-mom');
+
+            scorerContainer.innerHTML = '';
+            assisterContainer.innerHTML = '';
+            momSelect.innerHTML = '';
+
+            players.forEach(p => {
+                // 得点者チェックボックス
+                const scorerLabel = document.createElement('label');
+                scorerLabel.className = "flex items-center space-x-2 text-xs text-gray-300 cursor-pointer";
+                scorerLabel.innerHTML = `<input type="checkbox" name="scorer" value="${p.name}" class="rounded bg-gray-800 border-bordercolor text-primary focus:ring-0"> <span>#${p.number} ${p.name}</span>`;
+                scorerContainer.appendChild(scorerLabel);
+
+                // アシスト者チェックボックス
+                const assisterLabel = document.createElement('label');
+                assisterLabel.className = "flex items-center space-x-2 text-xs text-gray-300 cursor-pointer";
+                assisterLabel.innerHTML = `<input type="checkbox" name="assister" value="${p.name}" class="rounded bg-gray-800 border-bordercolor text-primary focus:ring-0"> <span>#${p.number} ${p.name}</span>`;
+                assisterContainer.appendChild(assisterLabel);
+
+                // MOMセレクト
+                const option = document.createElement('option');
+                option.value = p.name;
+                option.textContent = `#${p.number} ${p.name}`;
+                momSelect.appendChild(option);
+            });
+
+            // デフォルトの日付に今日を設定
+            document.getElementById('match-date').valueAsDate = new Date();
+        }
+
+        // 試合結果フォーム送信時の処理（自動集計ロジック）
+        function handleMatchSubmit(event) {
+            event.preventDefault();
+
+            const date = document.getElementById('match-date').value;
+            const opponent = document.getElementById('match-opponent').value;
+            const gf = parseInt(document.getElementById('match-gf').value);
+            const ga = parseInt(document.getElementById('match-ga').value);
+            const mom = document.getElementById('match-mom').value;
+
+            // チェックされた得点者を取得
+            const scorers = [];
+            document.querySelectorAll('input[name="scorer"]:checked').forEach(cb => {
+                scorers.push(cb.value);
+                // 選手データへゴール数加算
+                const player = players.find(p => p.name === cb.value);
+                if (player) player.goals += 1;
+            });
+
+            // チェックされたアシスト者を取得
+            const assisters = [];
+            document.querySelectorAll('input[name="assister"]:checked').forEach(cb => {
+                assisters.push(cb.value);
+                // 選手データへアシスト数加算
+                const player = players.find(p => p.name === cb.value);
+                if (player) player.assists += 1;
+            });
+
+            // MOM加算
+            const momPlayer = players.find(p => p.name === mom);
+            if (momPlayer) {
+                momPlayer.mom += 1;
+                momPlayer.rating = Math.min(10.0, momPlayer.rating + 0.2); // MOM受賞で評価アップ
+            }
+
+            // 新規試合データをリストに追加
+            const newMatch = {
+                id: Date.now(),
+                date,
+                opponent,
+                gf,
+                ga,
+                scorers,
+                assisters,
+                mom
+            };
+
+            matches.unshift(newMatch);
+            saveData();
+            renderMatchHistory();
+            renderPlayersDirectory();
+
+            showModal("試合記録の登録成功", `${opponent}戦の記録を保存し、選手個人スタッツへ自動集計しました！`);
+            event.target.reset();
+            document.getElementById('match-date').valueAsDate = new Date();
+        }
+
+        // 試合履歴の描画
+        function renderMatchHistory() {
+            const container = document.getElementById('match-history-list');
+            container.innerHTML = '';
+
+            if (matches.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">まだ試合記録がありません。</p>`;
+                return;
+            }
+
+            matches.forEach(m => {
+                const item = document.createElement('div');
+                item.className = "bg-gray-900 border border-bordercolor rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
+                item.innerHTML = `
+                    <div>
+                        <div class="flex items-center space-x-2 text-xs text-gray-400 mb-1">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> ${m.date}</span>
+                            <span>•</span>
+                            <span class="text-emerald-400 font-bold">vs ${m.opponent}</span>
+                        </div>
+                        <div class="font-extrabold text-base">
+                            COYS <span class="text-primary">${m.gf} - ${m.ga}</span> ${m.opponent}
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            得点: ${m.scorers.length > 0 ? m.scorers.join(', ') : 'なし'} | MOM: <span class="text-amber-400 font-bold">${m.mom}</span>
+                        </div>
+                    </div>
+                    <button onclick="deleteMatch(${m.id})" class="px-3 py-1.5 bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-500/20 rounded-lg text-xs font-bold transition-all">
+                        削除
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // 試合記録の削除
+        function deleteMatch(id) {
+            if (confirm("この試合記録を削除しますか？（※集計値はそのまま保持されます）")) {
+                matches = matches.filter(m => m.id !== id);
+                saveData();
+                renderMatchHistory();
+            }
+        }
+
+        // モーダル制御
+        function showModal(title, text) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-text').textContent = text;
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // 初期描画
+        function renderAll() {
+            renderPlayersDirectory();
+        }
+
+        window.onload = function() {
+            renderAll();
+        };
+    </script>
+</body>
+</html>
