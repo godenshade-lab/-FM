@@ -45,7 +45,7 @@
             <!-- ヒーロー / 次節情報 -->
             <div class="bg-gradient-to-r from-blue-900 to-club-card rounded-2xl p-6 border border-blue-500/30 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="bg-blue-500/20 text-blue-400 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH</span>
+                    <span class="bg-blue-500/20 text-blue-400 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH (J1 第36節)</span>
                     <span class="text-xs text-slate-400">2026.11.22 (Sat) 14:00 KO</span>
                 </div>
                 <div class="flex justify-around items-center text-center">
@@ -175,6 +175,24 @@
 
                 <form id="match-form" onsubmit="handleMatchSubmit(event)" class="space-y-6">
                     <input type="hidden" id="edit-match-index" value="-1">
+                    
+                    <!-- 大会カテゴリ & ラウンド -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">大会カテゴリ</label>
+                            <select id="input-competition" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent">
+                                <option value="Jリーグ">Jリーグ</option>
+                                <option value="ルヴァンカップ">ルヴァンカップ</option>
+                                <option value="天皇杯">天皇杯</option>
+                                <option value="ACL">ACL</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">ラウンド・節（自由記述）</label>
+                            <input type="text" id="input-round" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent" placeholder="例: 第35節 / 3回戦 / 準々決勝">
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">対戦相手</label>
@@ -190,10 +208,10 @@
                         </div>
                     </div>
 
-                    <!-- 得点記録セクション -->
+                    <!-- 得点記録セクション (アシスト有無対応) -->
                     <div class="border-t border-slate-800 pt-4">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-sm font-bold text-club-accent">⚽ 得点詳細</label>
+                            <label class="text-sm font-bold text-club-accent">⚽ 得点・アシスト詳細</label>
                             <button type="button" onclick="addGoalField()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded transition">+ 得点を追加</button>
                         </div>
                         <div id="goals-container" class="space-y-3"></div>
@@ -270,11 +288,11 @@
         let currentLineup = { fw: 6, om1: 8, om2: 14, mf1: 7, mf2: 10, mf3: 19, mf4: 9, df1: 2, df2: 4, df3: 3, gk: 1 };
         let currentBench = [11, 12, 13, 15, 16, 17, 18];
 
-        let players = JSON.parse(localStorage.getItem('club_players_v6')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v6') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v6')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v6')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v6')) || [];
+        let players = JSON.parse(localStorage.getItem('club_players_v7')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v7') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v7')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v7')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v7')) || [];
 
         function switchTab(tab) {
             document.getElementById('view-fan').classList.add('hidden');
@@ -301,7 +319,7 @@
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v6', formation);
+            localStorage.setItem('club_formation_v7', formation);
             document.getElementById('tactics-formation-select').value = formation;
             renderPitch();
         }
@@ -337,7 +355,8 @@
                     let goalsHtml = m.goals.map(g => {
                         const gp = players.find(x => x.name === g.scorer);
                         const photoHtml = gp ? `<img src="${gp.photo}" class="w-5 h-5 rounded-full object-cover">` : '⚽';
-                        return `<span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300 flex items-center gap-1.5">${photoHtml} ${g.scorer} (${g.time})</span>`;
+                        let assistText = g.assister ? ` (A: ${g.assister})` : '';
+                        return `<span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300 flex items-center gap-1.5">${photoHtml} ${g.scorer} (${g.time})${assistText}</span>`;
                     }).join(' ');
 
                     historyContainer.innerHTML += `
@@ -345,8 +364,11 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-xs px-2.5 py-1 rounded-full font-bold border ${badgeColor}">${m.result}</span>
                                 <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-0.5 rounded font-bold">${m.competition} : ${m.round}</span>
+                                        <span class="text-[10px] text-slate-400">${m.date}</span>
+                                    </div>
                                     <p class="text-sm font-bold text-white">vs ${m.opponent} <span class="text-club-gold text-base ml-2">${m.myScore} - ${m.oppScore}</span></p>
-                                    <p class="text-[10px] text-slate-400">${m.date}</p>
                                 </div>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
@@ -374,7 +396,7 @@
                                     </div>
                                 </div>
                                 <div class="text-right text-xs text-slate-400">
-                                    <span class="text-club-gold font-bold">⚽ ${p.goals}G</span> / <span>${p.assists}A</span>
+                                    <span class="text-club-gold font-bold">⚽ ${p.goals}G</span> / <span class="text-emerald-400 font-bold">${p.assists}A</span>
                                 </div>
                             </div>
                             <p class="text-xs text-slate-300 italic bg-slate-800/50 p-2 rounded border-l-2 border-club-accent mb-3">「${p.catchphrase || '特になし'}」</p>
@@ -413,7 +435,6 @@
             });
         }
 
-        // スマホの写真ファイルを選択して丸型に自動トリミングする関数
         function processImageFile(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -426,7 +447,6 @@
                         canvas.height = 150;
                         const ctx = canvas.getContext('2d');
 
-                        // 円形にクリップして描画
                         ctx.beginPath();
                         ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
                         ctx.closePath();
@@ -494,7 +514,7 @@
                 players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, catchphrase });
             }
 
-            localStorage.setItem('club_players_v6', JSON.stringify(players));
+            localStorage.setItem('club_players_v7', JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
@@ -528,7 +548,7 @@
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v6', JSON.stringify(players));
+                localStorage.setItem('club_players_v7', JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
@@ -573,15 +593,31 @@
             });
         }
 
-        function addGoalField(scorerName = "", timeStr = "") {
+        // 得点追加フィールド (アシスト有無選択対応)
+        function addGoalField(scorerName = "", assisterName = "", timeStr = "") {
             const container = document.getElementById('goals-container');
-            let options = players.map(p => `<option value="${p.name}" ${p.name === scorerName ? 'selected' : ''}>#${p.number} ${p.name}</option>`).join('');
+            let scorerOptions = players.map(p => `<option value="${p.name}" ${p.name === scorerName ? 'selected' : ''}>#${p.number} ${p.name}</option>`).join('');
+            
+            let assisterOptions = `<option value="">(アシストなし)</option>` + players.map(p => `<option value="${p.name}" ${p.name === assisterName ? 'selected' : ''}>#${p.number} ${p.name}</option>`).join('');
+
             const div = document.createElement('div');
-            div.className = "flex gap-2 items-center bg-slate-900/50 p-2 rounded border border-slate-800";
+            div.className = "flex flex-col sm:flex-row gap-2 items-center bg-slate-900/50 p-2.5 rounded border border-slate-800";
             div.innerHTML = `
-                <select class="goal-scorer bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white flex-1">${options}</select>
-                <input type="text" value="${timeStr}" placeholder="例: 34分" class="goal-time bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs w-24 text-center text-white">
-                <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300 text-xs px-2">✕</button>
+                <div class="w-full sm:flex-1">
+                    <label class="block text-[10px] text-slate-400 mb-0.5">得点者</label>
+                    <select class="goal-scorer w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white">${scorerOptions}</select>
+                </div>
+                <div class="w-full sm:flex-1">
+                    <label class="block text-[10px] text-slate-400 mb-0.5">アシスト者</label>
+                    <select class="goal-assister w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white">${assisterOptions}</select>
+                </div>
+                <div class="w-full sm:w-28">
+                    <label class="block text-[10px] text-slate-400 mb-0.5">時間帯</label>
+                    <input type="text" value="${timeStr}" placeholder="例: 34分" class="goal-time w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-center text-white">
+                </div>
+                <div class="self-end sm:self-center mt-1 sm:mt-0">
+                    <button type="button" onclick="this.closest('.flex').remove()" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">✕ 削除</button>
+                </div>
             `;
             container.appendChild(div);
         }
@@ -590,6 +626,8 @@
             switchTab('admin');
             const m = historyData[index];
             document.getElementById('edit-match-index').value = index;
+            document.getElementById('input-competition').value = m.competition || "Jリーグ";
+            document.getElementById('input-round').value = m.round || "";
             document.getElementById('input-opponent').value = m.opponent;
             document.getElementById('input-myscore').value = m.myScore;
             document.getElementById('input-oppscore').value = m.oppScore;
@@ -599,7 +637,7 @@
 
             const goalsContainer = document.getElementById('goals-container');
             goalsContainer.innerHTML = '';
-            m.goals.forEach(g => addGoalField(g.scorer, g.time));
+            m.goals.forEach(g => addGoalField(g.scorer, g.assister || "", g.time));
         }
 
         function resetMatchForm() {
@@ -615,26 +653,32 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v6', JSON.stringify(historyData));
-                recalculatePlayerGoals();
+                localStorage.setItem('club_history_v7', JSON.stringify(historyData));
+                recalculatePlayerStats();
                 renderFanSite();
             }
         }
 
-        function recalculatePlayerGoals() {
-            players.forEach(p => p.goals = 0);
+        function recalculatePlayerStats() {
+            players.forEach(p => { p.goals = 0; p.assists = 0; });
             historyData.forEach(match => {
                 match.goals.forEach(g => {
-                    const pObj = players.find(p => p.name === g.scorer);
-                    if (pObj) pObj.goals += 1;
+                    const sObj = players.find(p => p.name === g.scorer);
+                    if (sObj) sObj.goals += 1;
+                    if (g.assister) {
+                        const aObj = players.find(p => p.name === g.assister);
+                        if (aObj) aObj.assists += 1;
+                    }
                 });
             });
-            localStorage.setItem('club_players_v6', JSON.stringify(players));
+            localStorage.setItem('club_players_v7', JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
             event.preventDefault();
             const editIndex = Number(document.getElementById('edit-match-index').value);
+            const competition = document.getElementById('input-competition').value;
+            const round = document.getElementById('input-round').value;
             const opponent = document.getElementById('input-opponent').value;
             const myScore = Number(document.getElementById('input-myscore').value);
             const oppScore = Number(document.getElementById('input-oppscore').value);
@@ -646,7 +690,7 @@
 
             const formData = new FormData(event.target);
             formation = adminFormSelect;
-            localStorage.setItem('club_formation_v6', formation);
+            localStorage.setItem('club_formation_v7', formation);
 
             const template = formationTemplates[formation];
             template.rows.forEach(row => {
@@ -661,23 +705,28 @@
             }
 
             const scorers = document.querySelectorAll('.goal-scorer');
+            const assisters = document.querySelectorAll('.goal-assister');
             const times = document.querySelectorAll('.goal-time');
             let goalRecords = [];
             scorers.forEach((s, idx) => {
-                goalRecords.push({ scorer: s.value, time: times[idx].value || '0分' });
+                goalRecords.push({
+                    scorer: s.value,
+                    assister: assisters[idx].value || "",
+                    time: times[idx].value || '0分'
+                });
             });
 
             if (editIndex > -1) {
-                historyData[editIndex] = { opponent, myScore, oppScore, result, date: historyData[editIndex].date, goals: goalRecords };
+                historyData[editIndex] = { competition, round, opponent, myScore, oppScore, result, date: historyData[editIndex].date, goals: goalRecords };
             } else {
                 const today = new Date().toISOString().split('T')[0].replace(/-/g, '.');
-                historyData.unshift({ opponent, myScore, oppScore, result, date: today, goals: goalRecords });
+                historyData.unshift({ competition, round, opponent, myScore, oppScore, result, date: today, goals: goalRecords });
             }
 
-            recalculatePlayerGoals();
-            localStorage.setItem('club_lineup_v6', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v6', JSON.stringify(bench));
-            localStorage.setItem('club_history_v6', JSON.stringify(historyData));
+            recalculatePlayerStats();
+            localStorage.setItem('club_lineup_v7', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v7', JSON.stringify(bench));
+            localStorage.setItem('club_history_v7', JSON.stringify(historyData));
 
             alert('試合データを保存しました！');
             resetMatchForm();
