@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLUB MANAGEMENT & MEDIA PLATFORM</title>
+    <title>CLUB MANAGEMENT & SOFASCORE HUB</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        club: { dark: '#0f172a', card: '#1e293b', accent: '#10b981', gold: '#f59e0b' }
+                        club: { dark: '#0f172a', card: '#1e293b', accent: '#10b981', gold: '#f59e0b', sofa: '#1e3a8a' }
                     }
                 }
             }
@@ -26,11 +26,12 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center space-x-3">
                     <span class="text-2xl">⚽</span>
-                    <span class="font-bold text-lg tracking-wider text-club-accent">CLUB PORTAL</span>
+                    <span class="font-bold text-lg tracking-wider text-club-accent">SOFA PORTAL</span>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button onclick="switchTab('fan')" id="btn-fan" class="px-4 py-2 rounded-lg text-sm font-medium bg-club-accent text-slate-900 transition">ファンサイト</button>
-                    <button onclick="switchTab('admin')" id="btn-admin" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition">管理者ダッシュボード</button>
+                    <button onclick="switchTab('fan')" id="btn-fan" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition">ファンサイト</button>
+                    <button onclick="switchTab('admin')" id="btn-admin" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition">試合管理</button>
+                    <button onclick="switchTab('players')" id="btn-players" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition">選手名簿・登録</button>
                 </div>
             </div>
         </div>
@@ -42,10 +43,10 @@
         <!-- ==================== ファンサイトビュー ==================== -->
         <div id="view-fan" class="space-y-8">
             <!-- ヒーロー / 次節情報 -->
-            <div class="bg-gradient-to-r from-emerald-900 to-club-card rounded-2xl p-6 border border-emerald-500/30 shadow-xl">
+            <div class="bg-gradient-to-r from-blue-900 to-club-card rounded-2xl p-6 border border-blue-500/30 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="bg-emerald-500/20 text-emerald-400 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH</span>
-                    <span class="text-xs text-slate-400">2026.11.15 (Sat) 14:00 KO</span>
+                    <span class="bg-blue-500/20 text-blue-400 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH</span>
+                    <span class="text-xs text-slate-400">2026.11.22 (Sat) 14:00 KO</span>
                 </div>
                 <div class="flex justify-around items-center text-center">
                     <div>
@@ -54,78 +55,124 @@
                     </div>
                     <div class="text-xl font-bold text-club-gold">VS</div>
                     <div>
-                        <p class="text-2xl font-black">VISSEL KOBE</p>
+                        <p class="text-2xl font-black">KAWASAKI F.</p>
                         <p class="text-xs text-slate-400">AWAY</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 公式風スタメン＆ベンチ発表 -->
+            <!-- スタメン＆フォーメーション -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-bold flex items-center gap-2"><span>🛡️</span> フォーメーション (3-4-2-1)</h2>
-                    <span class="text-xs text-slate-400">最新マッチ設定</span>
-                </div>
-                <!-- ピッチグラフィック -->
-                <div class="relative bg-emerald-900/40 border border-emerald-600/30 rounded-xl p-6 h-[440px] flex flex-col justify-between items-center overflow-hidden mb-6">
-                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-800/20 via-transparent to-black/40 pointer-events-none"></div>
-                    
-                    <!-- FW -->
-                    <div class="w-full flex justify-center z-10" id="pos-fw"></div>
-                    <!-- OM -->
-                    <div class="w-full flex justify-around z-10" id="pos-om"></div>
-                    <!-- MF -->
-                    <div class="w-full flex justify-around z-10" id="pos-mf"></div>
-                    <!-- DF -->
-                    <div class="w-full flex justify-around z-10" id="pos-df"></div>
-                    <!-- GK -->
-                    <div class="w-full flex justify-center z-10" id="pos-gk"></div>
-                </div>
-
-                <!-- ベンチメンバー表示 -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2"><span>🪑</span> SUB (ベンチメンバー)</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="bench-list-container">
-                        <!-- 動的生成 -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+                    <h2 class="text-lg font-bold flex items-center gap-2"><span>🛡️</span> スタメン・フォーメーション</h2>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-400">陣形:</span>
+                        <select id="tactics-formation-select" onchange="changeFormation(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded px-2 py-1">
+                            <option value="3-4-2-1">3-4-2-1</option>
+                            <option value="4-4-2">4-4-2</option>
+                            <option value="4-2-3-1">4-2-3-1</option>
+                            <option value="4-1-2-3">4-1-2-3</option>
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            <!-- 試合結果履歴 (Match History) -->
-            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><span>📊</span> 試合結果・スコア履歴 (Match History)</h2>
-                <div class="space-y-3" id="match-history-container">
-                    <!-- 動的生成 -->
+                <!-- ピッチグラフィック -->
+                <div id="pitch-container" class="relative bg-emerald-900/40 border border-emerald-600/30 rounded-xl p-4 sm:p-6 h-[480px] flex flex-col justify-between items-center overflow-hidden mb-6">
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-800/20 via-transparent to-black/40 pointer-events-none"></div>
+                    <div id="formation-rows" class="w-full h-full flex flex-col justify-between z-10 py-2"></div>
+                </div>
+
+                <!-- ベンチメンバー発表 (7名) -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2"><span>🪑</span> SUB (ベンチメンバー 7名)</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2" id="bench-list-container"></div>
                 </div>
             </div>
 
-            <!-- 選手名鑑 (FotMob & エルゴラッソ風) -->
+            <!-- 試合結果履歴 -->
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><span>📊</span> 試合結果・スコア履歴</h2>
+                <div class="space-y-3" id="match-history-container"></div>
+            </div>
+
+            <!-- 選手名鑑 -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><span>👥</span> 登録選手一覧 & スタッツ</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="player-list-container">
-                    <!-- 動的生成 -->
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="player-list-container"></div>
             </div>
         </div>
 
-        <!-- ==================== 管理者ダッシュボード ==================== -->
+        <!-- ==================== 選手登録・管理ビュー ==================== -->
+        <div id="view-players" class="space-y-8 hidden">
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-club-accent" id="player-form-title">👤 新規選手登録</h2>
+                    <button type="button" onclick="resetPlayerForm()" id="cancel-player-edit" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">キャンセル</button>
+                </div>
+
+                <form id="player-reg-form" onsubmit="handlePlayerSubmit(event)" class="space-y-4">
+                    <input type="hidden" id="edit-player-id" value="">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">選手名</label>
+                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: ピーター ウタカ">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">背番号</label>
+                            <input type="number" id="p-number" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 99">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">ポジション</label>
+                            <select id="p-pos" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white">
+                                <option value="FW">FW</option>
+                                <option value="MF">MF</option>
+                                <option value="DF">DF</option>
+                                <option value="GK">GK</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">顔写真 画像URL</label>
+                            <input type="url" id="p-photo" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="https://... (画像のURL)">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">エルゴラッソ風寸評・特徴</label>
+                            <input type="text" id="p-catchphrase" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 圧倒的な決定力を誇る絶対的ストライカー">
+                        </div>
+                    </div>
+                    <button type="submit" id="player-submit-btn" class="w-full bg-club-accent text-slate-900 font-bold py-2.5 rounded-lg hover:bg-emerald-400 transition">選手を登録する</button>
+                </form>
+            </div>
+
+            <!-- 登録選手リスト (編集・削除用) -->
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
+                <h2 class="text-lg font-bold mb-4">📋 登録選手一覧（管理）</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="admin-player-list"></div>
+            </div>
+        </div>
+
+        <!-- ==================== 試合管理ビュー ==================== -->
         <div id="view-admin" class="space-y-8 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <h2 class="text-xl font-bold mb-2 text-club-accent">📝 試合結果 & 詳細記録入力</h2>
-                <p class="text-sm text-slate-400 mb-6">試合ごとのスコアやスタメン・ベンチ・得点時間を記録します。</p>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-club-accent" id="match-form-title">📝 試合結果 & スタメン・ベンチ入力</h2>
+                    <button type="button" onclick="resetMatchForm()" id="cancel-edit-btn" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">編集キャンセル</button>
+                </div>
 
                 <form id="match-form" onsubmit="handleMatchSubmit(event)" class="space-y-6">
+                    <input type="hidden" id="edit-match-index" value="-1">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">対戦相手</label>
                             <input type="text" id="input-opponent" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent" placeholder="例: 浦和レッズ">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">京都 (自チーム) 得点</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">京都 得点</label>
                             <input type="number" id="input-myscore" min="0" value="1" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">相手チーム 得点</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">相手 得点</label>
                             <input type="number" id="input-oppscore" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent">
                         </div>
                     </div>
@@ -133,32 +180,34 @@
                     <!-- 得点記録セクション -->
                     <div class="border-t border-slate-800 pt-4">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-sm font-bold text-club-accent">⚽ 得点・アシスト詳細</label>
+                            <label class="text-sm font-bold text-club-accent">⚽ 得点詳細</label>
                             <button type="button" onclick="addGoalField()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded transition">+ 得点を追加</button>
                         </div>
-                        <div id="goals-container" class="space-y-3">
-                            <!-- 動的行 -->
-                        </div>
+                        <div id="goals-container" class="space-y-3"></div>
                     </div>
 
-                    <!-- スタメン編成セクション -->
+                    <!-- フォーメーション選択 & スタメン編成 -->
                     <div class="border-t border-slate-800 pt-4">
-                        <label class="block text-sm font-bold text-club-accent mb-3">🛡️ スタメン編成 (3-4-2-1)</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lineup-selectors">
-                            <!-- 動的生成 -->
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm font-bold text-club-accent">🛡️ スタメン編成</label>
+                            <select id="admin-formation-select" onchange="updateLineupSelectors(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded px-2 py-1">
+                                <option value="3-4-2-1">3-4-2-1</option>
+                                <option value="4-4-2">4-4-2</option>
+                                <option value="4-2-3-1">4-2-3-1</option>
+                                <option value="4-1-2-3">4-1-2-3</option>
+                            </select>
                         </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lineup-selectors"></div>
                     </div>
 
-                    <!-- ベンチメンバー編成セクション -->
+                    <!-- ベンチメンバー編成 (7名) -->
                     <div class="border-t border-slate-800 pt-4">
-                        <label class="block text-sm font-bold text-club-accent mb-3">🪑 ベンチメンバー編成 (5名)</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="bench-selectors">
-                            <!-- 動的生成 -->
-                        </div>
+                        <label class="block text-sm font-bold text-club-accent mb-3">🪑 ベンチメンバー編成 (7名)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="bench-selectors"></div>
                     </div>
 
-                    <button type="submit" class="w-full bg-club-accent text-slate-900 font-bold py-3 rounded-lg hover:bg-emerald-400 transition shadow-lg">
-                        試合を記録してアーカイブに追加
+                    <button type="submit" id="submit-btn" class="w-full bg-club-accent text-slate-900 font-bold py-3 rounded-lg hover:bg-emerald-400 transition shadow-lg">
+                        試合を記録して保存する
                     </button>
                 </form>
             </div>
@@ -167,180 +216,271 @@
     </main>
 
     <script>
-        // デフォルト選手マスターデータ
         const defaultPlayers = [
-            { id: 1, name: "太田 岳志", number: 1, pos: "GK", goals: 0, assists: 0, catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締め続けるベテラン。" },
-            { id: 2, name: "麻田 将吾", number: 2, pos: "DF", goals: 1, assists: 0, catchphrase: "対人守備の強さと正確な左足のフィードが売りのレフティセンターバック。" },
-            { id: 3, name: "鈴木 冬一", number: 3, pos: "DF", goals: 0, assists: 2, catchphrase: "豊富な運動量でサイドを駆け上がるアグレッシブなサイドアタッカー。" },
-            { id: 4, name: "井上 黎生人", number: 4, pos: "DF", goals: 0, assists: 0, catchphrase: "危機察知能力に優れ、粘り強いタックルでピンチを防ぐファイター。" },
-            { id: 5, name: "川﨑 颯太", number: 7, pos: "MF", goals: 3, assists: 4, catchphrase: "ユース出身の心臓。圧倒的な走力と球際への強さで中盤を支配するアカデミーの誇り。" },
-            { id: 6, name: "金子 大毅", number: 6, pos: "MF", goals: 1, assists: 2, catchphrase: "広範な視野と正確なボール捌きでゲームをコントロールする職人。" },
-            { id: 7, name: "平賀 大空", number: 14, pos: "MF", goals: 2, assists: 1, catchphrase: "キレのあるドリブルで局面を打開する若きサイドアタッカー。" },
-            { id: 8, name: "福岡 慎平", number: 8, pos: "MF", goals: 2, assists: 3, catchphrase: "卓越した戦術眼と神出鬼没の飛び出しでゴールを狙うマルチプレイヤー。" },
-            { id: 9, name: "原 大智", number: 9, pos: "FW", goals: 8, assists: 2, catchphrase: "前線のターゲットマン。圧倒的な高さとポストプレーで攻撃の起点となるエース。" },
-            { id: 10, name: "宮吉 拓実", number: 13, pos: "FW", goals: 2, assists: 1, catchphrase: "巧みなポジショニングと一瞬の閃きで相手網を切り裂く経験豊富なアタッカー。" },
-            { id: 11, name: "豊川 雄太", number: 23, pos: "FW", goals: 5, assists: 1, catchphrase: "ゴールへの強烈な執念と裏抜けのスピードで相手DFを脅かすストライカー。" },
-            { id: 12, name: "ク ルイスイメリ", number: 16, pos: "MF", goals: 1, assists: 1, catchphrase: "卓越したテクニックとパスセンスで攻撃にリズムを生み出す起爆剤。" },
-            { id: 13, name: "佐藤 響", number: 24, pos: "DF", goals: 0, assists: 1, catchphrase: "圧倒的なスプリント力でサイドを切り裂くアグレッシブな側面王。" }
+            { id: 1, name: "太田 岳志", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
+            { id: 2, name: "麻田 将吾", number: 2, pos: "DF", goals: 1, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "対人守備の強さと正確な左足フィードが売りのレフティCB。" },
+            { id: 3, name: "鈴木 冬一", number: 3, pos: "DF", goals: 0, assists: 2, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "豊富な運動量でサイドを駆け上がるアグレッシブなアタッカー。" },
+            { id: 4, name: "井上 黎生人", number: 4, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "危機察知能力に優れ、粘り強いタックルでピンチを防ぐ。" },
+            { id: 5, name: "川﨑 颯太", number: 7, pos: "MF", goals: 3, assists: 4, photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", catchphrase: "ユース出身の心臓。圧倒的な走力と球際への強さで中盤を支配。" },
+            { id: 6, name: "金子 大毅", number: 6, pos: "MF", goals: 1, assists: 2, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "広範な視野と正確なボール捌きでゲームをコントロールする職人。" },
+            { id: 7, name: "平賀 大空", number: 14, pos: "MF", goals: 2, assists: 1, photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "キレのあるドリブルで局面を打開する若きサイドアタッカー。" },
+            { id: 8, name: "福岡 慎平", number: 8, pos: "MF", goals: 2, assists: 3, photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", catchphrase: "卓越した戦術眼と神出鬼没の飛び出しでゴールを狙うマルチ。" },
+            { id: 9, name: "原 大智", number: 9, pos: "FW", goals: 8, assists: 2, photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", catchphrase: "前線のターゲットマン。圧倒的な高さとポストプレーのエース。" },
+            { id: 10, name: "宮吉 拓実", number: 13, pos: "FW", goals: 2, assists: 1, photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80", catchphrase: "巧みなポジショニングと一瞬の閃きで網を切り裂く経験者。" },
+            { id: 11, name: "豊川 雄太", number: 23, pos: "FW", goals: 5, assists: 1, photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80", catchphrase: "ゴールへの強烈な執念と裏抜けスピードでDFを脅かすストライカー。" },
+            { id: 12, name: "クルイス イメリ", number: 16, pos: "MF", goals: 1, assists: 1, photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&auto=format&fit=crop&q=80", catchphrase: "卓越したテクニックとパスセンスで攻撃にリズムを生む起爆剤。" },
+            { id: 13, name: "佐藤 響", number: 24, pos: "DF", goals: 0, assists: 1, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "スプリント力でサイドを切り裂くアグレッシブなサイド王。" }
         ];
 
-        // 初期スタメン＆ベンチ設定
-        let currentLineup = {
-            fw: 9,
-            om1: 8, om2: 10,
-            mf1: 5, mf2: 6, mf3: 3, mf4: 7,
-            df1: 2, df2: 4, df3: 11,
-            gk: 1
+        const formationTemplates = {
+            "3-4-2-1": { rows: [{ label: "FW", keys: ["fw"] }, { label: "OM", keys: ["om1", "om2"] }, { label: "MF", keys: ["mf1", "mf2", "mf3", "mf4"] }, { label: "DF", keys: ["df1", "df2", "df3"] }, { label: "GK", keys: ["gk"] }] },
+            "4-4-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "MF", keys: ["mf1", "mf2", "mf3", "mf4"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
+            "4-2-3-1": { rows: [{ label: "FW", keys: ["fw"] }, { label: "OM", keys: ["om1", "om2", "om3"] }, { label: "DM", keys: ["dm1", "dm2"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
+            "4-1-2-3": { rows: [{ label: "FW", keys: ["fw1", "fw2", "fw3"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] }
         };
-        let currentBench = [12, 13, 3, 4, 1]; // ベンチメンバーのID配列
 
-        // 初期試合履歴データ
-        const defaultHistory = [
-            { opponent: "ガンバ大阪", myScore: 2, oppScore: 1, result: "WIN", date: "2026.11.02", goals: [{scorer: "原 大智", time: "18分"}, {scorer: "川﨑 颯太", time: "74分"}] }
-        ];
+        let currentFormation = "3-4-2-1";
+        let currentLineup = { fw: 9, om1: 8, om2: 10, mf1: 5, mf2: 6, mf3: 3, mf4: 7, df1: 2, df2: 4, df3: 11, gk: 1 };
+        let currentBench = [12, 13, 3, 4, 1, 2, 6]; // 7枠
 
-        // LocalStorage読み込み
-        let players = JSON.parse(localStorage.getItem('club_players')) || defaultPlayers;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench')) || currentBench;
-        let matchHistory = JSON.parse(localStorage.getItem('club_history')) || defaultHistory;
+        let players = JSON.parse(localStorage.getItem('club_players_v3')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v3') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v3')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v3')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v3')) || [];
 
-        // タブ切り替え
         function switchTab(tab) {
-            const fanView = document.getElementById('view-fan');
-            const adminView = document.getElementById('view-admin');
-            const btnFan = document.getElementById('btn-fan');
-            const btnAdmin = document.getElementById('btn-admin');
+            document.getElementById('view-fan').classList.add('hidden');
+            document.getElementById('view-admin').classList.add('hidden');
+            document.getElementById('view-players').classList.add('hidden');
+            document.getElementById('btn-fan').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition";
+            document.getElementById('btn-admin').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition";
+            document.getElementById('btn-players').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition";
 
             if (tab === 'fan') {
-                fanView.classList.remove('hidden');
-                adminView.classList.add('hidden');
-                btnFan.className = "px-4 py-2 rounded-lg text-sm font-medium bg-club-accent text-slate-900 transition";
-                btnAdmin.className = "px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition";
+                document.getElementById('view-fan').classList.remove('hidden');
+                document.getElementById('btn-fan').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition";
                 renderFanSite();
-            } else {
-                fanView.classList.add('hidden');
-                adminView.classList.remove('hidden');
-                btnAdmin.className = "px-4 py-2 rounded-lg text-sm font-medium bg-club-accent text-slate-900 transition";
-                btnFan.className = "px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition";
+            } else if (tab === 'admin') {
+                document.getElementById('view-admin').classList.remove('hidden');
+                document.getElementById('btn-admin').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition";
                 renderAdminForm();
+            } else if (tab === 'players') {
+                document.getElementById('view-players').classList.remove('hidden');
+                document.getElementById('btn-players').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition";
+                renderPlayerManagement();
             }
         }
 
-        // ファンサイト描画
-        function renderFanSite() {
-            // スタメン配置
-            renderPositionSlot('pos-fw', [lineup.fw]);
-            renderPositionSlot('pos-om', [lineup.om1, lineup.om2]);
-            renderPositionSlot('pos-mf', [lineup.mf1, lineup.mf2, lineup.mf3, lineup.mf4]);
-            renderPositionSlot('pos-df', [lineup.df1, lineup.df2, lineup.df3]);
-            renderPositionSlot('pos-gk', [lineup.gk]);
+        function changeFormation(val) {
+            formation = val;
+            localStorage.setItem('club_formation_v3', formation);
+            document.getElementById('tactics-formation-select').value = formation;
+            renderPitch();
+        }
 
-            // ベンチメンバー描画
+        function renderFanSite() {
+            document.getElementById('tactics-formation-select').value = formation;
+            renderPitch();
+
+            // ベンチメンバー (7名)
             const benchContainer = document.getElementById('bench-list-container');
             benchContainer.innerHTML = '';
             bench.forEach(id => {
-                const p = players.find(x => x.id === Number(id));
+                const p = players.find(x => x.id == id);
                 if (p) {
                     benchContainer.innerHTML += `
-                        <div class="bg-slate-900/80 border border-slate-700/60 p-2 rounded-lg text-center">
-                            <span class="text-[10px] text-club-accent font-bold">#${p.number} (${p.pos})</span>
-                            <p class="text-xs font-bold text-white truncate">${p.name}</p>
+                        <div class="bg-slate-900/80 border border-slate-700/60 p-2 rounded-lg flex items-center gap-2">
+                            <img src="${p.photo}" class="w-8 h-8 rounded-full object-cover border border-slate-600">
+                            <div class="truncate">
+                                <span class="text-[9px] text-club-accent block font-bold">#${p.number}</span>
+                                <p class="text-xs font-bold text-white truncate">${p.name}</p>
+                            </div>
                         </div>
                     `;
                 }
             });
 
-            // 試合履歴描画
+            // 試合履歴
             const historyContainer = document.getElementById('match-history-container');
             historyContainer.innerHTML = '';
-            matchHistory.forEach(m => {
-                let badgeColor = m.result === 'WIN' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (m.result === 'DRAW' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30');
-                let goalsHtml = m.goals.map(g => `<span class="text-xs bg-slate-800 px-2 py-0.5 rounded text-slate-300">⚽ ${g.scorer} (${g.time})</span>`).join(' ');
+            if (historyData.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-slate-500">まだ試合結果が記録されていません。「試合管理」タブから記録を追加してください。</p>`;
+            } else {
+                historyData.forEach((m, idx) => {
+                    let badgeColor = m.result === 'WIN' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (m.result === 'DRAW' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30');
+                    let goalsHtml = m.goals.map(g => {
+                        const gp = players.find(x => x.name === g.scorer);
+                        const photoHtml = gp ? `<img src="${gp.photo}" class="w-5 h-5 rounded-full object-cover">` : '⚽';
+                        return `<span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300 flex items-center gap-1.5">${photoHtml} ${g.scorer} (${g.time})</span>`;
+                    }).join(' ');
 
-                historyContainer.innerHTML += `
-                    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xs px-2.5 py-1 rounded-full font-bold border ${badgeColor}">${m.result}</span>
-                            <div>
-                                <p class="text-sm font-bold text-white">vs ${m.opponent} <span class="text-club-gold text-base ml-2">${m.myScore} - ${m.oppScore}</span></p>
-                                <p class="text-[10px] text-slate-400">${m.date}</p>
+                    historyContainer.innerHTML += `
+                        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs px-2.5 py-1 rounded-full font-bold border ${badgeColor}">${m.result}</span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">vs ${m.opponent} <span class="text-club-gold text-base ml-2">${m.myScore} - ${m.oppScore}</span></p>
+                                    <p class="text-[10px] text-slate-400">${m.date}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="flex flex-wrap gap-1">${goalsHtml || '<span class="text-xs text-slate-500">得点なし</span>'}</div>
+                                <button onclick="editMatch(${idx})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded transition">編集</button>
+                                <button onclick="deleteMatch(${idx})" class="text-xs bg-red-900/30 hover:bg-red-900/50 text-red-400 px-2 py-1 rounded transition">削除</button>
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-1">${goalsHtml || '<span class="text-xs text-slate-500">得点なし</span>'}</div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
-            // 選手一覧・名鑑
+            // 選手名鑑
             const container = document.getElementById('player-list-container');
             container.innerHTML = '';
             players.forEach(p => {
                 container.innerHTML += `
                     <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
                         <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="bg-club-accent/20 text-club-accent text-xs font-bold px-2 py-0.5 rounded">#${p.number} ${p.pos}</span>
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="${p.photo}" class="w-12 h-12 rounded-full object-cover border-2 border-club-accent shadow">
+                                    <div>
+                                        <span class="bg-club-accent/20 text-club-accent text-[10px] font-bold px-2 py-0.5 rounded">#${p.number} ${p.pos}</span>
+                                        <h3 class="font-bold text-base mt-0.5">${p.name}</h3>
+                                    </div>
+                                </div>
                                 <div class="text-right text-xs text-slate-400">
-                                    <span>⚽ ${p.goals}G</span> / <span>${p.assists}A</span>
+                                    <span class="text-club-gold font-bold">⚽ ${p.goals}G</span> / <span>${p.assists}A</span>
                                 </div>
                             </div>
-                            <h3 class="font-bold text-base mb-1">${p.name}</h3>
-                            <p class="text-xs text-slate-300 italic bg-slate-800/50 p-2 rounded border-l-2 border-club-accent mb-3">「${p.catchphrase}」</p>
+                            <p class="text-xs text-slate-300 italic bg-slate-800/50 p-2 rounded border-l-2 border-club-accent mb-3">「${p.catchphrase || '特になし'}」</p>
                         </div>
                         <div class="text-[10px] text-slate-400 flex justify-between border-t border-slate-800 pt-2">
-                            <span>レイティング: 7.24</span>
-                            <span class="text-emerald-400">好調</span>
+                            <span>SOFA RATING: <strong class="text-white">7.42</strong></span>
+                            <span class="text-emerald-400 font-semibold">好調</span>
                         </div>
                     </div>
                 `;
             });
         }
 
-        function renderPositionSlot(elementId, pIds) {
-            const el = document.getElementById(elementId);
-            el.innerHTML = '';
-            pIds.forEach(id => {
-                const p = players.find(x => x.id === Number(id));
-                if (p) {
-                    el.innerHTML += `
-                        <div class="bg-slate-900/90 border border-emerald-500/40 px-3 py-1.5 rounded-lg text-center shadow">
-                            <span class="text-[10px] text-club-accent block font-bold">#${p.number}</span>
-                            <span class="text-xs font-bold text-white">${p.name.split(' ')[0]}</span>
-                        </div>
-                    `;
-                }
-            });
-        }
-
-        // 管理者フォーム描画
-        function renderAdminForm() {
-            const container = document.getElementById('lineup-selectors');
+        function renderPitch() {
+            const container = document.getElementById('formation-rows');
             container.innerHTML = '';
-            const positions = [
-                { key: 'fw', label: 'FW (1トップ)' },
-                { key: 'om1', label: 'OM (シャドー左)' }, { key: 'om2', label: 'OM (シャドー右)' },
-                { key: 'mf1', label: 'MF (WB左)' }, { key: 'mf2', label: 'MF (ボランチ左)' }, { key: 'mf3', label: 'MF (ボランチ右)' }, { key: 'mf4', label: 'MF (WB右)' },
-                { key: 'df1', label: 'DF (CB左)' }, { key: 'df2', label: 'DF (CB中央)' }, { key: 'df3', label: 'DF (CB右)' },
-                { key: 'gk', label: 'GK (ゴールキーパー)' }
-            ];
+            const template = formationTemplates[formation] || formationTemplates["3-4-2-1"];
 
-            positions.forEach(pos => {
-                let options = players.map(p => `<option value="${p.id}" ${lineup[pos.key] == p.id ? 'selected' : ''}>#${p.number} ${p.name} (${p.pos})</option>`).join('');
-                container.innerHTML += `
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">${pos.label}</label>
-                        <select name="pos_${pos.key}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
-                            ${options}
-                        </select>
+            template.rows.forEach(row => {
+                let rowHtml = `<div class="w-full flex justify-around items-center z-10 my-auto">`;
+                row.keys.forEach(key => {
+                    const pId = lineup[key];
+                    const p = players.find(x => x.id == pId);
+                    if (p) {
+                        rowHtml += `
+                            <div class="flex flex-col items-center bg-slate-900/90 border border-emerald-500/50 px-2.5 py-1.5 rounded-xl shadow-lg">
+                                <img src="${p.photo}" class="w-8 h-8 rounded-full object-cover border border-emerald-400 mb-1">
+                                <span class="text-[9px] text-club-accent font-bold">#${p.number}</span>
+                                <span class="text-xs font-bold text-white whitespace-nowrap">${p.name.split(' ')[0]}</span>
+                            </div>
+                        `;
+                    }
+                });
+                rowHtml += `</div>`;
+                container.innerHTML += rowHtml;
+            });
+        }
+
+        // --- 選手登録・管理ロジック ---
+        function renderPlayerManagement() {
+            const listEl = document.getElementById('admin-player-list');
+            listEl.innerHTML = '';
+            players.forEach(p => {
+                listEl.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.photo}" class="w-10 h-10 rounded-full object-cover border border-club-accent">
+                            <div>
+                                <span class="text-[10px] text-club-accent font-bold">#${p.number} [${p.pos}]</span>
+                                <p class="text-sm font-bold text-white">${p.name}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editPlayer(${p.id})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded">編集</button>
+                            <button onclick="deletePlayer(${p.id})" class="text-xs bg-red-900/30 hover:bg-red-900/50 text-red-400 px-2 py-1 rounded">削除</button>
+                        </div>
                     </div>
                 `;
             });
+        }
 
-            // ベンチメンバー選択枠 (5枠)
+        function handlePlayerSubmit(event) {
+            event.preventDefault();
+            const editId = document.getElementById('edit-player-id').value;
+            const name = document.getElementById('p-name').value;
+            const number = Number(document.getElementById('p-number').value);
+            const pos = document.getElementById('p-pos').value;
+            const photo = document.getElementById('p-photo').value;
+            const catchphrase = document.getElementById('p-catchphrase').value;
+
+            if (editId) {
+                const p = players.find(x => x.id == editId);
+                if (p) {
+                    p.name = name;
+                    p.number = number;
+                    p.pos = pos;
+                    p.photo = photo;
+                    p.catchphrase = catchphrase;
+                }
+            } else {
+                const newId = players.length > 0 ? Math.max(...players.map(x => x.id)) + 1 : 1;
+                players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, catchphrase });
+            }
+
+            localStorage.setItem('club_players_v3', JSON.stringify(players));
+            resetPlayerForm();
+            renderPlayerManagement();
+            alert('選手データを保存しました！');
+        }
+
+        function editPlayer(id) {
+            const p = players.find(x => x.id == id);
+            if (!p) return;
+            document.getElementById('edit-player-id').value = p.id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-number').value = p.number;
+            document.getElementById('p-pos').value = p.pos;
+            document.getElementById('p-photo').value = p.photo;
+            document.getElementById('p-catchphrase').value = p.catchphrase || '';
+            document.getElementById('player-form-title').innerText = "👤 選手情報の編集";
+            document.getElementById('player-submit-btn').innerText = "変更を保存する";
+            document.getElementById('cancel-player-edit').classList.remove('hidden');
+        }
+
+        function resetPlayerForm() {
+            document.getElementById('edit-player-id').value = "";
+            document.getElementById('player-reg-form').reset();
+            document.getElementById('player-form-title').innerText = "👤 新規選手登録";
+            document.getElementById('player-submit-btn').innerText = "選手を登録する";
+            document.getElementById('cancel-player-edit').classList.add('hidden');
+        }
+
+        function deletePlayer(id) {
+            if (confirm('この選手を削除しますか？')) {
+                players = players.filter(x => x.id != id);
+                localStorage.setItem('club_players_v3', JSON.stringify(players));
+                renderPlayerManagement();
+            }
+        }
+
+        // --- 試合管理ロジック ---
+        function renderAdminForm() {
+            const selectEl = document.getElementById('admin-formation-select');
+            selectEl.value = formation;
+            updateLineupSelectors(formation);
+
+            // ベンチメンバー選択 (7枠)
             const benchContainer = document.getElementById('bench-selectors');
             benchContainer.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 7; i++) {
                 let options = players.map(p => `<option value="${p.id}" ${bench[i] == p.id ? 'selected' : ''}>#${p.number} ${p.name} (${p.pos})</option>`).join('');
                 benchContainer.innerHTML += `
                     <div>
@@ -353,89 +493,137 @@
             }
         }
 
-        // 得点追加フィールド
-        function addGoalField() {
+        function updateLineupSelectors(formType) {
+            const container = document.getElementById('lineup-selectors');
+            container.innerHTML = '';
+            const template = formationTemplates[formType] || formationTemplates["3-4-2-1"];
+
+            template.rows.forEach(row => {
+                row.keys.forEach(key => {
+                    let options = players.map(p => `<option value="${p.id}" ${lineup[key] == p.id ? 'selected' : ''}>#${p.number} ${p.name} (${p.pos})</option>`).join('');
+                    container.innerHTML += `
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">${row.label} (${key})</label>
+                            <select name="pos_${key}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-white">
+                                ${options}
+                            </select>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function addGoalField(scorerName = "", timeStr = "") {
             const container = document.getElementById('goals-container');
-            let options = players.map(p => `<option value="${p.name}">#${p.number} ${p.name}</option>`).join('');
+            let options = players.map(p => `<option value="${p.name}" ${p.name === scorerName ? 'selected' : ''}>#${p.number} ${p.name}</option>`).join('');
             const div = document.createElement('div');
             div.className = "flex gap-2 items-center bg-slate-900/50 p-2 rounded border border-slate-800";
             div.innerHTML = `
                 <select class="goal-scorer bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white flex-1">${options}</select>
-                <input type="text" placeholder="例: 34分" class="goal-time bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs w-24 text-center text-white">
+                <input type="text" value="${timeStr}" placeholder="例: 34分" class="goal-time bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs w-24 text-center text-white">
                 <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300 text-xs px-2">✕</button>
             `;
             container.appendChild(div);
         }
 
-        // フォーム送信処理
+        function editMatch(index) {
+            switchTab('admin');
+            const m = historyData[index];
+            document.getElementById('edit-match-index').value = index;
+            document.getElementById('input-opponent').value = m.opponent;
+            document.getElementById('input-myscore').value = m.myScore;
+            document.getElementById('input-oppscore').value = m.oppScore;
+            document.getElementById('match-form-title').innerText = "📝 試合結果の編集";
+            document.getElementById('submit-btn').innerText = "変更を保存する";
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+
+            const goalsContainer = document.getElementById('goals-container');
+            goalsContainer.innerHTML = '';
+            m.goals.forEach(g => addGoalField(g.scorer, g.time));
+        }
+
+        function resetMatchForm() {
+            document.getElementById('edit-match-index').value = "-1";
+            document.getElementById('match-form').reset();
+            document.getElementById('match-form-title').innerText = "📝 試合結果 & スタメン・ベンチ入力";
+            document.getElementById('submit-btn').innerText = "試合を記録して保存する";
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+            document.getElementById('goals-container').innerHTML = '';
+            renderAdminForm();
+        }
+
+        function deleteMatch(index) {
+            if (confirm('この試合記録を削除しますか？')) {
+                historyData.splice(index, 1);
+                localStorage.setItem('club_history_v3', JSON.stringify(historyData));
+                recalculatePlayerGoals();
+                renderFanSite();
+            }
+        }
+
+        function recalculatePlayerGoals() {
+            players.forEach(p => p.goals = 0);
+            historyData.forEach(match => {
+                match.goals.forEach(g => {
+                    const pObj = players.find(p => p.name === g.scorer);
+                    if (pObj) pObj.goals += 1;
+                });
+            });
+            localStorage.setItem('club_players_v3', JSON.stringify(players));
+        }
+
         function handleMatchSubmit(event) {
             event.preventDefault();
-            
-            const formData = new FormData(event.target);
+            const editIndex = Number(document.getElementById('edit-match-index').value);
             const opponent = document.getElementById('input-opponent').value;
             const myScore = Number(document.getElementById('input-myscore').value);
             const oppScore = Number(document.getElementById('input-oppscore').value);
+            const adminFormSelect = document.getElementById('admin-formation-select').value;
 
             let result = 'DRAW';
             if (myScore > oppScore) result = 'WIN';
             else if (myScore < oppScore) result = 'LOSE';
 
-            // スタメン更新
-            lineup.fw = formData.get('pos_fw');
-            lineup.om1 = formData.get('pos_om1');
-            lineup.om2 = formData.get('pos_om2');
-            lineup.mf1 = formData.get('pos_mf1');
-            lineup.mf2 = formData.get('pos_mf2');
-            lineup.mf3 = formData.get('pos_mf3');
-            lineup.mf4 = formData.get('pos_mf4');
-            lineup.df1 = formData.get('pos_df1');
-            lineup.df2 = formData.get('pos_df2');
-            lineup.df3 = formData.get('pos_df3');
-            lineup.gk = formData.get('pos_gk');
+            const formData = new FormData(event.target);
+            formation = adminFormSelect;
+            localStorage.setItem('club_formation_v3', formation);
 
-            // ベンチ更新
+            const template = formationTemplates[formation];
+            template.rows.forEach(row => {
+                row.keys.forEach(key => {
+                    if (formData.get(`pos_${key}`)) lineup[key] = formData.get(`pos_${key}`);
+                });
+            });
+
             bench = [];
-            for (let i = 0; i < 5; i++) {
-                bench.push(formData.get(`bench_${i}`));
+            for (let i = 0; i < 7; i++) {
+                if (formData.get(`bench_${i}`)) bench.push(formData.get(`bench_${i}`));
             }
 
-            // 得点者の集計と記録作成
             const scorers = document.querySelectorAll('.goal-scorer');
             const times = document.querySelectorAll('.goal-time');
             let goalRecords = [];
-
             scorers.forEach((s, idx) => {
-                const sName = s.value;
-                const timeStr = times[idx].value || '0分';
-                goalRecords.push({ scorer: sName, time: timeStr });
-
-                // 選手データのゴール数をインクリメント
-                const pObj = players.find(p => p.name === sName);
-                if (pObj) pObj.goals += 1;
+                goalRecords.push({ scorer: s.value, time: times[idx].value || '0分' });
             });
 
-            // マッチ履歴に追加
-            const today = new Date().toISOString().split('T')[0].replace(/-/g, '.');
-            matchHistory.unshift({
-                opponent: opponent,
-                myScore: myScore,
-                oppScore: oppScore,
-                result: result,
-                date: today,
-                goals: goalRecords
-            });
+            if (editIndex > -1) {
+                historyData[editIndex] = { opponent, myScore, oppScore, result, date: historyData[editIndex].date, goals: goalRecords };
+            } else {
+                const today = new Date().toISOString().split('T')[0].replace(/-/g, '.');
+                historyData.unshift({ opponent, myScore, oppScore, result, date: today, goals: goalRecords });
+            }
 
-            // LocalStorageに保存
-            localStorage.setItem('club_players', JSON.stringify(players));
-            localStorage.setItem('club_lineup', JSON.stringify(lineup));
-            localStorage.setItem('club_bench', JSON.stringify(bench));
-            localStorage.setItem('club_history', JSON.stringify(matchHistory));
+            recalculatePlayerGoals();
+            localStorage.setItem('club_lineup_v3', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v3', JSON.stringify(bench));
+            localStorage.setItem('club_history_v3', JSON.stringify(historyData));
 
-            alert('試合結果を記録し、履歴と個人成績を更新しました！');
+            alert('試合データを保存しました！');
+            resetMatchForm();
             switchTab('fan');
         }
 
-        // 初期描画
         renderFanSite();
     </script>
 </body>
