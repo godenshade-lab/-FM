@@ -42,7 +42,7 @@
     <!-- メインコンテンツ -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-        <!-- ==================== ファンサイト・ホームビュー ==================== -->
+        <!-- ==================== ホームビュー ==================== -->
         <div id="view-fan" class="space-y-8">
             <div class="bg-gradient-to-r from-purple-950 to-club-card rounded-2xl p-6 border border-purple-500/30 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <!-- 公式SNS風 グラフィックカード（スタメン発表） -->
+            <!-- スタメン発表グラフィック -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800 shadow-2xl">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-bold flex items-center gap-2"><span>📱</span> 公式SNS・スタメン発表グラフィック</h2>
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <!-- SNS風リアクションフィード -->
+            <!-- SNSフィード -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
                     <h2 class="text-lg font-bold flex items-center gap-2"><span>💬</span> クラブ・SNSフィード</h2>
@@ -117,8 +117,8 @@
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📖</span> 京都サンガF.C. 選手名鑑</h2>
-                        <p class="text-xs text-slate-400 mt-1">カードをタップすると、公式HP風の詳細プロフィールやキャリア成績を確認できます。</p>
+                        <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📖</span> 選手名鑑（背番号順）</h2>
+                        <p class="text-xs text-slate-400 mt-1">カードをタップすると詳細プロフィール・キャリア成績を確認できます。</p>
                     </div>
                     <div class="flex gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
                         <button onclick="filterDirectory('ALL')" id="dir-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition">全員</button>
@@ -161,13 +161,20 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
+                            <label class="block text-xs text-slate-400 mb-1">チーム名</label>
+                            <input type="text" id="p-team" required value="京都サンガF.C." class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white">
+                        </div>
+                        <div>
                             <label class="block text-xs text-slate-400 mb-1">選手名</label>
-                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 太田 岳志">
+                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 米倉 滉生">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">背番号</label>
                             <input type="number" id="p-number" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 1">
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">ポジション</label>
                             <select id="p-pos" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white">
@@ -176,6 +183,29 @@
                                 <option value="DF">DF</option>
                                 <option value="GK">GK</option>
                             </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">生年月日</label>
+                            <input type="text" id="p-birth" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 1990/12/26">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">利き足</label>
+                            <input type="text" id="p-foot" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 右足">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">仲の良い選手</label>
+                            <input type="text" id="p-friends" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 〇〇選手">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">背番号へのこだわり</label>
+                            <input type="text" id="p-num-commit" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: キーパーといえば">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">今季の目標</label>
+                            <input type="text" id="p-goal" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: ケガをしない、成長する">
                         </div>
                     </div>
 
@@ -192,7 +222,6 @@
                         </div>
                     </div>
 
-                    <!-- キャリア成績画像アップロード枠 -->
                     <div class="border-t border-slate-800 pt-4 space-y-2">
                         <label class="block text-xs font-bold text-purple-400">📈 キャリア成績表の画像（スクショ等をそのまま貼る）</label>
                         <input type="file" id="p-career-file" accept="image/*" onchange="processCareerImage(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
@@ -295,41 +324,40 @@
 
     </main>
 
-    <!-- ==================== 選手詳細ポップアップ (モーダル) ==================== -->
+    <!-- ==================== 選手詳細ポップアップ ==================== -->
     <div id="player-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-club-card border border-purple-500/40 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 relative shadow-2xl my-8">
             <button onclick="closePlayerModal()" class="absolute top-6 right-6 bg-slate-800 hover:bg-slate-700 text-slate-300 w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition">✕</button>
-            
-            <div id="modal-content" class="space-y-6">
-                <!-- 動的生成 -->
-            </div>
+            <div id="modal-content" class="space-y-6"></div>
         </div>
     </div>
 
     <script>
+        // 京都サンガF.C. 選手データ（1番を米倉選手、38番に吉村選手を追加）
         const defaultPlayers = [
-            { id: 1, name: "太田 岳志", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
-            { id: 2, name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
-            { id: 3, name: "鈴木 翔司", number: 3, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "堅実なディフェンスと正確なビルドアップで貢献するDF。" },
-            { id: 4, name: "前川 源基", number: 5, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "空中戦の強さと闘志あふれるタックルでピンチを防ぐファイター。" },
-            { id: 5, name: "三嶋 泰詩", number: 6, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "冷静な読みと機動力でサイドを封鎖するサイドアタッカー兼任DF。" },
-            { id: 6, name: "ソンポントンチャイ", number: 7, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", catchphrase: "強烈なシュート力と抜群の決定力でゴールをこじ開ける点取り屋。" },
-            { id: 7, name: "松本 崇", number: 8, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", catchphrase: "豊富な運動量で中盤を駆け回り、攻守のバランスを保つダイナモ。" },
-            { id: 8, name: "西谷 元貴", number: 13, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80", catchphrase: "卓越したテクニックとスペースへの抜け出しで決定機を演出。" },
-            { id: 9, name: "矢部 滉平", number: 14, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "果敢なオーバーラップから正確なクロスを送り込む攻撃的サイドバック。" },
-            { id: 10, name: "永田 一雄", number: 15, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&auto=format&fit=crop&q=80", catchphrase: "巧みなボールキープと正確な配球でゲームを落ち着かせる司令塔。" },
-            { id: 11, name: "ウェリントン", number: 18, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", catchphrase: "前線のターゲットマン。圧倒的なフィジカルで相手DFを粉砕するエース。" },
-            { id: 12, name: "エドマリオン", number: 19, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80", catchphrase: "スピードを活かした縦への推進力で相手網を切り裂くアタッカー。" },
-            { id: 13, name: "金子 一馬", number: 20, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "ゴール前での嗅覚と一瞬の閃きでネットを揺らすストライカー。" },
-            { id: 14, name: "木原 大喜", number: 23, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "広い視野と精度の高いパスでチャンスを量産するクリエイター。" },
-            { id: 15, name: "ヴィンツェンツォディアナ", number: 24, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", catchphrase: "強靭なフィジカルと対人の強さで相手攻撃陣を封じ込めるCB。" },
-            { id: 16, name: "岡本 武蔵", number: 26, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "献身的な守備とハードワークでチームを支えるユーティリティ。" },
-            { id: 17, name: "三島 眞也", number: 27, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", catchphrase: "献身的な守備と機敏な判断力で中盤を引き締めるマルチMF。" },
-            { id: 18, name: "高城 有哉", number: 28, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "果敢なアプローチと粘り強いディフェンスが持ち味の若手DF。" },
-            { id: 19, name: "宮内 修斗", number: 32, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "鋭いターンとアイデアあふれるパスで攻撃のアクセントとなるMF。" },
-            { id: 20, name: "笠原 健吾", number: 50, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "ベテランならではの統率力で最終ラインを統括するリーダー。" },
-            { id: 21, name: "青山 京祐", number: 55, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "高さを活かしたヘディングと堅実な守備対応でゴールを守る。" },
-            { id: 22, name: "鶴田 俊哉", number: 99, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", catchphrase: "圧倒的な突破力とシュートセンスでチームを勝利に導くエース。" }
+            { id: 1, team: "京都サンガF.C.", name: "米倉 滉生", number: 1, pos: "GK", goals: 0, assists: 0, birth: "1995/05/12", foot: "右", friends: "―", numCommit: "キーパーといえば", goal: "無失点での勝利に貢献する", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
+            { id: 2, team: "京都サンガF.C.", name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, birth: "1997/03/15", foot: "右", friends: "―", numCommit: "特になし", goal: "レギュラー定着", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
+            { id: 3, team: "京都サンガF.C.", name: "鈴木 翔司", number: 3, pos: "DF", goals: 0, assists: 0, birth: "1998/08/20", foot: "左", friends: "―", numCommit: "特になし", goal: "全試合出場", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "堅実なディフェンスと正確なビルドアップで貢献するDF。" },
+            { id: 4, team: "京都サンガF.C.", name: "前川 源基", number: 5, pos: "DF", goals: 0, assists: 0, birth: "1996/11/04", foot: "右", friends: "―", numCommit: "特になし", goal: "セットプレーからの得点", photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "空中戦の強さと闘志あふれるタックルでピンチを防ぐファイター。" },
+            { id: 5, team: "京都サンガF.C.", name: "三嶋 泰詩", number: 6, pos: "DF", goals: 0, assists: 0, birth: "1999/01/10", foot: "右", friends: "―", numCommit: "特になし", goal: "サイドからの崩しを増やす", photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "冷静な読みと機動力でサイドを封鎖するサイドアタッカー兼任DF。" },
+            { id: 6, team: "京都サンガF.C.", name: "ソンポントンチャイ", number: 7, pos: "FW", goals: 0, assists: 0, birth: "2000/04/05", foot: "右", friends: "―", numCommit: "エースの番号", goal: "得点王獲得", photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "強烈なシュート力と抜群の決定力でゴールをこじ開ける点取り屋。" },
+            { id: 7, team: "京都サンガF.C.", name: "松本 崇", number: 8, pos: "MF", goals: 0, assists: 0, birth: "1997/09/18", foot: "右", friends: "―", numCommit: "特になし", goal: "アシスト量産", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "豊富な運動量で中盤を駆け回り、攻守のバランスを保つダイナモ。" },
+            { id: 8, team: "京都サンガF.C.", name: "西谷 元貴", number: 13, pos: "FW", goals: 0, assists: 0, birth: "1996/02/22", foot: "右", friends: "―", numCommit: "特になし", goal: "二桁得点", photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "卓越したテクニックとスペースへの抜け出しで決定機を演出。" },
+            { id: 9, team: "京都サンガF.C.", name: "矢部 滉平", number: 14, pos: "DF", goals: 0, assists: 0, birth: "1998/06/30", foot: "左", friends: "―", numCommit: "特になし", goal: "クロス精度向上", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "果敢なオーバーラップから正確なクロスを送り込む攻撃的サイドバック。" },
+            { id: 10, team: "京都サンガF.C.", name: "永田 一雄", number: 15, pos: "MF", goals: 0, assists: 0, birth: "1995/10/11", foot: "右", friends: "―", numCommit: "特になし", goal: "ゲームコントロール", photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "巧みなボールキープと正確な配球でゲームを落ち着かせる司令塔。" },
+            { id: 11, team: "京都サンガF.C.", name: "ウェリントン", number: 18, pos: "FW", goals: 0, assists: 0, birth: "1993/02/14", foot: "左", friends: "―", numCommit: "特になし", goal: "チームを勝たせるゴール", photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "前線のターゲットマン。圧倒的なフィジカルで相手DFを粉砕するエース。" },
+            { id: 12, team: "京都サンガF.C.", name: "エドマリオン", number: 19, pos: "FW", goals: 0, assists: 0, birth: "2001/07/07", foot: "右", friends: "―", numCommit: "特になし", goal: "インパクトを残す", photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "スピードを活かした縦への推進力で相手網を切り裂くアタッカー。" },
+            { id: 13, team: "京都サンガF.C.", name: "金子 一馬", number: 20, pos: "FW", goals: 0, assists: 0, birth: "1997/12/03", foot: "右", friends: "―", numCommit: "特になし", goal: "ジョーカーとしての役割全う", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "ゴール前での嗅覚と一瞬の閃きでネットを揺らすストライカー。" },
+            { id: 14, team: "京都サンガF.C.", name: "木原 大喜", number: 23, pos: "MF", goals: 0, assists: 0, birth: "1999/05/25", foot: "右", friends: "―", numCommit: "特になし", goal: "スタメン定着", photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "広い視野と精度の高いパスでチャンスを量産するクリエイター。" },
+            { id: 15, team: "京都サンガF.C.", name: "ヴィンツェンツォディアナ", number: 24, pos: "DF", goals: 0, assists: 0, birth: "1998/01/29", foot: "右", friends: "―", numCommit: "特になし", goal: "対人勝率100%", photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "強靭なフィジカルと対人の強さで相手攻撃陣を封じ込めるCB。" },
+            { id: 16, team: "京都サンガF.C.", name: "岡本 武蔵", number: 26, pos: "DF", goals: 0, assists: 0, birth: "2000/09/09", foot: "右", friends: "―", numCommit: "特になし", goal: "ハードワークでアピール", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "献身的な守備とハードワークでチームを支えるユーティリティ。" },
+            { id: 17, team: "京都サンガF.C.", name: "三島 眞也", number: 27, pos: "MF", goals: 0, assists: 0, birth: "1997/04/14", foot: "右", friends: "―", numCommit: "特になし", goal: "中盤の底でゲームを引き締める", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "献身的な守備と機敏な判断力で中盤を引き締めるマルチMF。" },
+            { id: 18, team: "京都サンガF.C.", name: "高城 有哉", number: 28, pos: "DF", goals: 0, assists: 0, birth: "2002/03/03", foot: "右", friends: "―", numCommit: "特になし", goal: "若さ爆発のプレー", photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "果敢なアプローチと粘り強いディフェンスが持ち味の若手DF。" },
+            { id: 19, team: "京都サンガF.C.", name: "宮内 修斗", number: 32, pos: "MF", goals: 0, assists: 0, birth: "2000/10/20", foot: "左", friends: "―", numCommit: "特になし", goal: "チャンスメイク", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "鋭いターンとアイデアあふれるパスで攻撃のアクセントとなるMF。" },
+            { id: 20, team: "京都サンガF.C.", name: "吉村 瑞希", number: 38, pos: "GK", goals: 0, assists: 0, birth: "2001/12/01", foot: "右", friends: "―", numCommit: "思い入れのある番号", goal: "正GKの座を奪う", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "闘志あふれるセービングが売りの若きゴールキーパー。" },
+            { id: 21, team: "京都サンガF.C.", name: "笠原 健吾", number: 50, pos: "DF", goals: 0, assists: 0, birth: "1991/08/15", foot: "右", friends: "―", numCommit: "特になし", goal: "チームを牽引する", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "ベテランならではの統率力で最終ラインを統括するリーダー。" },
+            { id: 22, team: "京都サンガF.C.", name: "青山 京祐", number: 55, pos: "DF", goals: 0, assists: 0, birth: "1994/06/19", foot: "右", friends: "―", numCommit: "特になし", goal: "無失点にこだわる", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "高さを活かしたヘディングと堅実な守備対応でゴールを守る。" },
+            { id: 23, team: "京都サンガF.C.", name: "鶴田 俊哉", number: 99, pos: "FW", goals: 0, assists: 0, birth: "1995/03/30", foot: "右", friends: "―", numCommit: "特別な番号", goal: "チームをJ1上位へ導く", photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "圧倒的な突破力とシュートセンスでチームを勝利に導くエース。" }
         ];
 
         const formationTemplates = {
@@ -345,12 +373,12 @@
         let currentLineup = { fw: 6, om1: 8, om2: 14, mf1: 7, mf2: 10, mf3: 19, mf4: 9, df1: 2, df2: 4, df3: 3, gk: 1 };
         let currentBench = [11, 12, 13, 15, 16, 17, 18];
 
-        let players = JSON.parse(localStorage.getItem('club_players_v11')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v11') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v11')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v11')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v11')) || [];
-        let socialFeed = JSON.parse(localStorage.getItem('club_social_v11')) || [
+        let players = JSON.parse(localStorage.getItem('club_players_v12')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v12') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v12')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v12')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v12')) || [];
+        let socialFeed = JSON.parse(localStorage.getItem('club_social_v12')) || [
             { type: 'official', author: '京都サンガF.C. 公式', tag: '公式', time: '1時間前', text: '本日のJ1第36節 川崎フロンターレ戦のスターティングイレブンを発表！', likes: 1408, comments: 13 },
             { type: 'player', author: '鶴田 俊哉 (#99)', tag: '選手', time: '30分前', text: '絶対に勝つ。ピッチで躍動する姿を見てほしい！', likes: 890, comments: 24 },
             { type: 'fan', author: 'サンガ魂のサポ', tag: 'ファン', time: '10分前', text: '今日のスタメン熱すぎんだろ…！勝利を頼むぞ！', likes: 93, comments: 3 }
@@ -389,7 +417,7 @@
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v11', formation);
+            localStorage.setItem('club_formation_v12', formation);
             renderFanSite();
         }
 
@@ -399,7 +427,7 @@
             renderSocialFeed('all');
         }
 
-        // 選手名鑑カード描画 (タップすると詳細モーダルが開く)
+        // 選手名鑑（背番号順に自動ソート）
         function renderPlayerDirectory(posFilter) {
             ['dir-all', 'dir-gk', 'dir-df', 'dir-mf', 'dir-fw'].forEach(id => {
                 document.getElementById(id).className = "px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
@@ -412,7 +440,10 @@
 
             const grid = document.getElementById('directory-grid');
             grid.innerHTML = '';
-            const targetPlayers = posFilter === 'ALL' ? players : players.filter(p => p.pos === posFilter);
+
+            // 背番号（number）の昇順に並び替え
+            let sortedPlayers = [...players].sort((a, b) => Number(a.number) - Number(b.number));
+            const targetPlayers = posFilter === 'ALL' ? sortedPlayers : sortedPlayers.filter(p => p.pos === posFilter);
 
             if (targetPlayers.length === 0) {
                 grid.innerHTML = `<p class="text-xs text-slate-500 col-span-3 text-center py-8">該当する選手がいません。</p>`;
@@ -439,7 +470,7 @@
                         </div>
                         <div class="text-[10px] text-purple-400 font-bold flex justify-between border-t border-slate-800 pt-2.5">
                             <span>詳細プロフィール・キャリアを見る →</span>
-                            <span>通算出場記録あり</span>
+                            <span>${p.team || '京都サンガF.C.'}</span>
                         </div>
                     </div>
                 `;
@@ -450,7 +481,7 @@
             renderPlayerDirectory(pos);
         }
 
-        // 選手詳細モーダルを開く
+        // 選手詳細ポップアップ（公式HP風プロフィール＋キャリア画像）
         function openPlayerModal(id) {
             const p = players.find(x => x.id == id);
             if (!p) return;
@@ -464,18 +495,27 @@
                     <div>
                         <span class="bg-purple-500/20 text-purple-300 text-xs font-bold px-2.5 py-1 rounded">#${p.number} [${p.pos}]</span>
                         <h2 class="text-2xl font-black text-white mt-1">${p.name}</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">京都サンガF.C. トップチーム</p>
+                        <p class="text-xs text-slate-400 mt-0.5">${p.team || '京都サンガF.C.'}</p>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
-                        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider">プロフィール・寸評</h3>
-                        <p class="text-sm text-slate-200 italic">「${p.catchphrase || '特になし'}」</p>
-                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                            <div>今季ゴール: <strong class="text-club-gold">${p.goals} G</strong></div>
-                            <div>今季アシスト: <strong class="text-emerald-400">${p.assists} A</strong></div>
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider">プロフィール詳細</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-300">
+                            <div>生年月日: <strong class="text-white">${p.birth || '-'}</strong></div>
+                            <div>利き足: <strong class="text-white">${p.foot || '-'}</strong></div>
+                            <div>仲の良い選手: <strong class="text-white">${p.friends || '-'}</strong></div>
+                            <div>背番号のこだわり: <strong class="text-white">${p.numCommit || '-'}</strong></div>
                         </div>
+                        <div class="text-xs text-slate-300 pt-2 border-t border-slate-800">
+                            今季の目標: <strong class="text-purple-300">${p.goal || '-'}</strong>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+                        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider">エルゴラッソ風寸評</h3>
+                        <p class="text-sm text-slate-200 italic">「${p.catchphrase || '特になし'}」</p>
                     </div>
 
                     <div class="space-y-2">
@@ -494,7 +534,6 @@
             document.getElementById('player-modal').classList.add('hidden');
         }
 
-        // 選手編集用のキャリア画像処理
         function processCareerImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -671,7 +710,9 @@
         function renderPlayerManagement() {
             const listEl = document.getElementById('admin-player-list');
             listEl.innerHTML = '';
-            players.forEach(p => {
+            let sortedPlayers = [...players].sort((a, b) => Number(a.number) - Number(b.number));
+
+            sortedPlayers.forEach(p => {
                 listEl.innerHTML += `
                     <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
@@ -693,9 +734,15 @@
         function handlePlayerSubmit(event) {
             event.preventDefault();
             const editId = document.getElementById('edit-player-id').value;
+            const team = document.getElementById('p-team').value;
             const name = document.getElementById('p-name').value;
             const number = Number(document.getElementById('p-number').value);
             const pos = document.getElementById('p-pos').value;
+            const birth = document.getElementById('p-birth').value;
+            const foot = document.getElementById('p-foot').value;
+            const friends = document.getElementById('p-friends').value;
+            const numCommit = document.getElementById('p-num-commit').value;
+            const goal = document.getElementById('p-goal').value;
             const catchphrase = document.getElementById('p-catchphrase').value;
             let photo = document.getElementById('p-photo-base64').value;
             let careerImg = document.getElementById('p-career-base64').value;
@@ -703,9 +750,15 @@
             if (editId) {
                 const p = players.find(x => x.id == editId);
                 if (p) {
+                    p.team = team;
                     p.name = name;
                     p.number = number;
                     p.pos = pos;
+                    p.birth = birth;
+                    p.foot = foot;
+                    p.friends = friends;
+                    p.numCommit = numCommit;
+                    p.goal = goal;
                     if (photo) p.photo = photo;
                     if (careerImg) p.careerImg = careerImg;
                     p.catchphrase = catchphrase;
@@ -715,10 +768,10 @@
                     photo = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
                 }
                 const newId = players.length > 0 ? Math.max(...players.map(x => x.id)) + 1 : 1;
-                players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, careerImg, catchphrase });
+                players.push({ id: newId, team, name, number, pos, goals: 0, assists: 0, birth, foot, friends, numCommit, goal, photo, careerImg, catchphrase });
             }
 
-            localStorage.setItem('club_players_v11', JSON.stringify(players));
+            localStorage.setItem('club_players_v12', JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
@@ -729,9 +782,15 @@
             const p = players.find(x => x.id == id);
             if (!p) return;
             document.getElementById('edit-player-id').value = p.id;
+            document.getElementById('p-team').value = p.team || "京都サンガF.C.";
             document.getElementById('p-name').value = p.name;
             document.getElementById('p-number').value = p.number;
             document.getElementById('p-pos').value = p.pos;
+            document.getElementById('p-birth').value = p.birth || '';
+            document.getElementById('p-foot').value = p.foot || '';
+            document.getElementById('p-friends').value = p.friends || '';
+            document.getElementById('p-num-commit').value = p.numCommit || '';
+            document.getElementById('p-goal').value = p.goal || '';
             document.getElementById('p-catchphrase').value = p.catchphrase || '';
             document.getElementById('p-photo-base64').value = p.photo;
             document.getElementById('photo-preview-container').innerHTML = `<img src="${p.photo}" class="w-full h-full object-cover">`;
@@ -751,6 +810,7 @@
         function resetPlayerForm() {
             document.getElementById('edit-player-id').value = "";
             document.getElementById('player-reg-form').reset();
+            document.getElementById('p-team').value = "京都サンガF.C.";
             document.getElementById('p-photo-base64').value = "";
             document.getElementById('p-career-base64').value = "";
             document.getElementById('photo-preview-container').innerHTML = `<span class="text-[10px] text-slate-500">No Img</span>`;
@@ -763,7 +823,7 @@
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v11', JSON.stringify(players));
+                localStorage.setItem('club_players_v12', JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
@@ -866,7 +926,7 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v11', JSON.stringify(historyData));
+                localStorage.setItem('club_history_v12', JSON.stringify(historyData));
                 recalculatePlayerStats();
                 renderFanSite();
                 renderDedicatedHistory();
@@ -885,7 +945,7 @@
                     }
                 });
             });
-            localStorage.setItem('club_players_v11', JSON.stringify(players));
+            localStorage.setItem('club_players_v12', JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
@@ -941,13 +1001,13 @@
                     likes: 1,
                     comments: 0
                 });
-                localStorage.setItem('club_social_v11', JSON.stringify(socialFeed));
+                localStorage.setItem('club_social_v12', JSON.stringify(socialFeed));
             }
 
             recalculatePlayerStats();
-            localStorage.setItem('club_lineup_v11', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v11', JSON.stringify(bench));
-            localStorage.setItem('club_history_v11', JSON.stringify(historyData));
+            localStorage.setItem('club_lineup_v12', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v12', JSON.stringify(bench));
+            localStorage.setItem('club_history_v12', JSON.stringify(historyData));
 
             alert('試合データを保存しました！');
             resetMatchForm();
