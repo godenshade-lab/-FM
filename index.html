@@ -72,12 +72,14 @@
                             <option value="4-4-2">4-4-2</option>
                             <option value="4-2-3-1">4-2-3-1</option>
                             <option value="4-1-2-3">4-1-2-3</option>
+                            <option value="5-2-1-2">5-2-1-2</option>
+                            <option value="4-1-2-1-2">4-1-2-1-2 (ダイヤモンド)</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- ピッチグラフィック -->
-                <div id="pitch-container" class="relative bg-emerald-900/40 border border-emerald-600/30 rounded-xl p-4 sm:p-6 h-[480px] flex flex-col justify-between items-center overflow-hidden mb-6">
+                <div id="pitch-container" class="relative bg-emerald-900/40 border border-emerald-600/30 rounded-xl p-4 sm:p-6 h-[500px] flex flex-col justify-between items-center overflow-hidden mb-6">
                     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-800/20 via-transparent to-black/40 pointer-events-none"></div>
                     <div id="formation-rows" class="w-full h-full flex flex-col justify-between z-10 py-2"></div>
                 </div>
@@ -106,20 +108,22 @@
         <div id="view-players" class="space-y-8 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-club-accent" id="player-form-title">👤 新規選手登録</h2>
+                    <h2 class="text-xl font-bold text-club-accent" id="player-form-title">👤 新規選手登録 (顔写真トリミング対応)</h2>
                     <button type="button" onclick="resetPlayerForm()" id="cancel-player-edit" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">キャンセル</button>
                 </div>
 
                 <form id="player-reg-form" onsubmit="handlePlayerSubmit(event)" class="space-y-4">
                     <input type="hidden" id="edit-player-id" value="">
+                    <input type="hidden" id="p-photo-base64" value="">
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">選手名</label>
-                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: ピーター ウタカ">
+                            <input type="text" id="p-name" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 米倉 滉生">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">背番号</label>
-                            <input type="number" id="p-number" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 99">
+                            <input type="number" id="p-number" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 1">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">ポジション</label>
@@ -131,21 +135,30 @@
                             </select>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">顔写真 画像URL</label>
-                            <input type="url" id="p-photo" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="https://... (画像のURL)">
+                            <label class="block text-xs text-slate-400 mb-1">スマホの写真から顔写真を選ぶ（自動円形トリミング）</label>
+                            <input type="file" id="p-image-file" accept="image/*" onchange="processImageFile(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-club-accent file:text-slate-900 hover:file:bg-emerald-400 cursor-pointer">
                         </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">エルゴラッソ風寸評・特徴</label>
-                            <input type="text" id="p-catchphrase" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 圧倒的な決定力を誇る絶対的ストライカー">
+                        <div class="flex items-center gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                            <span class="text-xs text-slate-400">プレビュー:</span>
+                            <div id="photo-preview-container" class="w-12 h-12 rounded-full overflow-hidden border-2 border-club-accent bg-slate-800 flex items-center justify-center">
+                                <span class="text-[10px] text-slate-500">No Img</span>
+                            </div>
                         </div>
                     </div>
+
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">エルゴラッソ風寸評・特徴</label>
+                        <input type="text" id="p-catchphrase" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: チームの心臓として攻守に躍動する要">
+                    </div>
+
                     <button type="submit" id="player-submit-btn" class="w-full bg-club-accent text-slate-900 font-bold py-2.5 rounded-lg hover:bg-emerald-400 transition">選手を登録する</button>
                 </form>
             </div>
 
-            <!-- 登録選手リスト (編集・削除用) -->
+            <!-- 登録選手リスト -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <h2 class="text-lg font-bold mb-4">📋 登録選手一覧（管理）</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="admin-player-list"></div>
@@ -195,6 +208,8 @@
                                 <option value="4-4-2">4-4-2</option>
                                 <option value="4-2-3-1">4-2-3-1</option>
                                 <option value="4-1-2-3">4-1-2-3</option>
+                                <option value="5-2-1-2">5-2-1-2</option>
+                                <option value="4-1-2-1-2">4-1-2-1-2 (ダイヤモンド)</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lineup-selectors"></div>
@@ -216,38 +231,50 @@
     </main>
 
     <script>
+        // 22名の初期登録データ
         const defaultPlayers = [
-            { id: 1, name: "太田 岳志", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
-            { id: 2, name: "麻田 将吾", number: 2, pos: "DF", goals: 1, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "対人守備の強さと正確な左足フィードが売りのレフティCB。" },
-            { id: 3, name: "鈴木 冬一", number: 3, pos: "DF", goals: 0, assists: 2, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "豊富な運動量でサイドを駆け上がるアグレッシブなアタッカー。" },
-            { id: 4, name: "井上 黎生人", number: 4, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "危機察知能力に優れ、粘り強いタックルでピンチを防ぐ。" },
-            { id: 5, name: "川﨑 颯太", number: 7, pos: "MF", goals: 3, assists: 4, photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", catchphrase: "ユース出身の心臓。圧倒的な走力と球際への強さで中盤を支配。" },
-            { id: 6, name: "金子 大毅", number: 6, pos: "MF", goals: 1, assists: 2, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "広範な視野と正確なボール捌きでゲームをコントロールする職人。" },
-            { id: 7, name: "平賀 大空", number: 14, pos: "MF", goals: 2, assists: 1, photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "キレのあるドリブルで局面を打開する若きサイドアタッカー。" },
-            { id: 8, name: "福岡 慎平", number: 8, pos: "MF", goals: 2, assists: 3, photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", catchphrase: "卓越した戦術眼と神出鬼没の飛び出しでゴールを狙うマルチ。" },
-            { id: 9, name: "原 大智", number: 9, pos: "FW", goals: 8, assists: 2, photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", catchphrase: "前線のターゲットマン。圧倒的な高さとポストプレーのエース。" },
-            { id: 10, name: "宮吉 拓実", number: 13, pos: "FW", goals: 2, assists: 1, photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80", catchphrase: "巧みなポジショニングと一瞬の閃きで網を切り裂く経験者。" },
-            { id: 11, name: "豊川 雄太", number: 23, pos: "FW", goals: 5, assists: 1, photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80", catchphrase: "ゴールへの強烈な執念と裏抜けスピードでDFを脅かすストライカー。" },
-            { id: 12, name: "クルイス イメリ", number: 16, pos: "MF", goals: 1, assists: 1, photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&auto=format&fit=crop&q=80", catchphrase: "卓越したテクニックとパスセンスで攻撃にリズムを生む起爆剤。" },
-            { id: 13, name: "佐藤 響", number: 24, pos: "DF", goals: 0, assists: 1, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "スプリント力でサイドを切り裂くアグレッシブなサイド王。" }
+            { id: 1, name: "米倉 滉生", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
+            { id: 2, name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
+            { id: 3, name: "鈴木 翔司", number: 3, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "堅実なディフェンスと正確なビルドアップで貢献するDF。" },
+            { id: 4, name: "前川 源基", number: 5, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "空中戦の強さと闘志あふれるタックルでピンチを防ぐファイター。" },
+            { id: 5, name: "三嶋 泰詩", number: 6, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "冷静な読みと機動力でサイドを封鎖するサイドアタッカー兼任DF。" },
+            { id: 6, name: "ソンポントンチャイ", number: 7, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", catchphrase: "強烈なシュート力と抜群の決定力でゴールをこじ開ける点取り屋。" },
+            { id: 7, name: "松本 崇", number: 8, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", catchphrase: "豊富な運動量で中盤を駆け回り、攻守のバランスを保つダイナモ。" },
+            { id: 8, name: "西谷 元貴", number: 13, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80", catchphrase: "卓越したテクニックとスペースへの抜け出しで決定機を演出。" },
+            { id: 9, name: "矢部 滉平", number: 14, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "果敢なオーバーラップから正確なクロスを送り込む攻撃的サイドバック。" },
+            { id: 10, name: "永田 一雄", number: 15, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&auto=format&fit=crop&q=80", catchphrase: "巧みなボールキープと正確な配球でゲームを落ち着かせる司令塔。" },
+            { id: 11, name: "ウェリントン", number: 18, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", catchphrase: "前線のターゲットマン。圧倒的なフィジカルで相手DFを粉砕するエース。" },
+            { id: 12, name: "エドマリオン", number: 19, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80", catchphrase: "スピードを活かした縦への推進力で相手網を切り裂くアタッカー。" },
+            { id: 13, name: "金子 一馬", number: 20, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "ゴール前での嗅覚と一瞬の閃きでネットを揺らすストライカー。" },
+            { id: 14, name: "木原 大喜", number: 23, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80", catchphrase: "広い視野と精度の高いパスでチャンスを量産するクリエイター。" },
+            { id: 15, name: "ヴィンツェンツォディアナ", number: 24, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80", catchphrase: "強靭なフィジカルと対人の強さで相手攻撃陣を封じ込めるCB。" },
+            { id: 16, name: "岡本 武蔵", number: 26, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "献身的な守備とハードワークでチームを支えるユーティリティ。" },
+            { id: 17, name: "三島 眞也", number: 27, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", catchphrase: "献身的な守備と機敏な判断力で中盤を引き締めるマルチMF。" },
+            { id: 18, name: "高城 有哉", number: 28, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", catchphrase: "果敢なアプローチと粘り強いディフェンスが持ち味の若手DF。" },
+            { id: 19, name: "宮内 修斗", number: 32, pos: "MF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "鋭いターンとアイデアあふれるパスで攻撃のアクセントとなるMF。" },
+            { id: 20, name: "笠原 健吾", number: 50, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "ベテランならではの統率力で最終ラインを統括するリーダー。" },
+            { id: 21, name: "青山 京祐", number: 55, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "高さを活かしたヘディングと堅実な守備対応でゴールを守る。" },
+            { id: 22, name: "鶴田 俊哉", number: 99, pos: "FW", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", catchphrase: "圧倒的な突破力とシュートセンスでチームを勝利に導くエース。" }
         ];
 
         const formationTemplates = {
             "3-4-2-1": { rows: [{ label: "FW", keys: ["fw"] }, { label: "OM", keys: ["om1", "om2"] }, { label: "MF", keys: ["mf1", "mf2", "mf3", "mf4"] }, { label: "DF", keys: ["df1", "df2", "df3"] }, { label: "GK", keys: ["gk"] }] },
             "4-4-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "MF", keys: ["mf1", "mf2", "mf3", "mf4"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
             "4-2-3-1": { rows: [{ label: "FW", keys: ["fw"] }, { label: "OM", keys: ["om1", "om2", "om3"] }, { label: "DM", keys: ["dm1", "dm2"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
-            "4-1-2-3": { rows: [{ label: "FW", keys: ["fw1", "fw2", "fw3"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] }
+            "4-1-2-3": { rows: [{ label: "FW", keys: ["fw1", "fw2", "fw3"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] },
+            "5-2-1-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "OM", keys: ["om"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4", "df5"] }, { label: "GK", keys: ["gk"] }] },
+            "4-1-2-1-2": { rows: [{ label: "FW", keys: ["fw1", "fw2"] }, { label: "OM", keys: ["om"] }, { label: "MF", keys: ["mf1", "mf2"] }, { label: "DM", keys: ["dm"] }, { label: "DF", keys: ["df1", "df2", "df3", "df4"] }, { label: "GK", keys: ["gk"] }] }
         };
 
         let currentFormation = "3-4-2-1";
-        let currentLineup = { fw: 9, om1: 8, om2: 10, mf1: 5, mf2: 6, mf3: 3, mf4: 7, df1: 2, df2: 4, df3: 11, gk: 1 };
-        let currentBench = [12, 13, 3, 4, 1, 2, 6]; // 7枠
+        let currentLineup = { fw: 6, om1: 8, om2: 14, mf1: 7, mf2: 10, mf3: 19, mf4: 9, df1: 2, df2: 4, df3: 3, gk: 1 };
+        let currentBench = [11, 12, 13, 15, 16, 17, 18];
 
-        let players = JSON.parse(localStorage.getItem('club_players_v3')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v3') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v3')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v3')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v3')) || [];
+        let players = JSON.parse(localStorage.getItem('club_players_v6')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v6') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v6')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v6')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v6')) || [];
 
         function switchTab(tab) {
             document.getElementById('view-fan').classList.add('hidden');
@@ -274,7 +301,7 @@
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v3', formation);
+            localStorage.setItem('club_formation_v6', formation);
             document.getElementById('tactics-formation-select').value = formation;
             renderPitch();
         }
@@ -283,7 +310,6 @@
             document.getElementById('tactics-formation-select').value = formation;
             renderPitch();
 
-            // ベンチメンバー (7名)
             const benchContainer = document.getElementById('bench-list-container');
             benchContainer.innerHTML = '';
             bench.forEach(id => {
@@ -301,7 +327,6 @@
                 }
             });
 
-            // 試合履歴
             const historyContainer = document.getElementById('match-history-container');
             historyContainer.innerHTML = '';
             if (historyData.length === 0) {
@@ -334,12 +359,11 @@
                 });
             }
 
-            // 選手名鑑
             const container = document.getElementById('player-list-container');
             container.innerHTML = '';
             players.forEach(p => {
                 container.innerHTML += `
-                    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                    <div class="bg-club-card border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-lg">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
@@ -376,10 +400,10 @@
                     const p = players.find(x => x.id == pId);
                     if (p) {
                         rowHtml += `
-                            <div class="flex flex-col items-center bg-slate-900/90 border border-emerald-500/50 px-2.5 py-1.5 rounded-xl shadow-lg">
-                                <img src="${p.photo}" class="w-8 h-8 rounded-full object-cover border border-emerald-400 mb-1">
-                                <span class="text-[9px] text-club-accent font-bold">#${p.number}</span>
-                                <span class="text-xs font-bold text-white whitespace-nowrap">${p.name.split(' ')[0]}</span>
+                            <div class="flex flex-col items-center bg-slate-900/90 border border-emerald-500/50 px-2 py-1 rounded-xl shadow-lg">
+                                <img src="${p.photo}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-emerald-400 mb-1">
+                                <span class="text-[8px] sm:text-[9px] text-club-accent font-bold">#${p.number}</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-white whitespace-nowrap">${p.name.split(' ')[0]}</span>
                             </div>
                         `;
                     }
@@ -389,7 +413,39 @@
             });
         }
 
-        // --- 選手登録・管理ロジック ---
+        // スマホの写真ファイルを選択して丸型に自動トリミングする関数
+        function processImageFile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const size = Math.min(img.width, img.height);
+                        canvas.width = 150;
+                        canvas.height = 150;
+                        const ctx = canvas.getContext('2d');
+
+                        // 円形にクリップして描画
+                        ctx.beginPath();
+                        ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
+                        ctx.closePath();
+                        ctx.clip();
+
+                        const offsetX = (img.width - size) / 2;
+                        const offsetY = (img.height - size) / 2;
+                        ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, 150, 150);
+
+                        const base64Data = canvas.toDataURL('image/jpeg', 0.85);
+                        document.getElementById('p-photo-base64').value = base64Data;
+                        document.getElementById('photo-preview-container').innerHTML = `<img src="${base64Data}" class="w-full h-full object-cover">`;
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function renderPlayerManagement() {
             const listEl = document.getElementById('admin-player-list');
             listEl.innerHTML = '';
@@ -418,8 +474,8 @@
             const name = document.getElementById('p-name').value;
             const number = Number(document.getElementById('p-number').value);
             const pos = document.getElementById('p-pos').value;
-            const photo = document.getElementById('p-photo').value;
             const catchphrase = document.getElementById('p-catchphrase').value;
+            let photo = document.getElementById('p-photo-base64').value;
 
             if (editId) {
                 const p = players.find(x => x.id == editId);
@@ -427,15 +483,18 @@
                     p.name = name;
                     p.number = number;
                     p.pos = pos;
-                    p.photo = photo;
+                    if (photo) p.photo = photo;
                     p.catchphrase = catchphrase;
                 }
             } else {
+                if (!photo) {
+                    photo = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
+                }
                 const newId = players.length > 0 ? Math.max(...players.map(x => x.id)) + 1 : 1;
                 players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, catchphrase });
             }
 
-            localStorage.setItem('club_players_v3', JSON.stringify(players));
+            localStorage.setItem('club_players_v6', JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
@@ -448,8 +507,9 @@
             document.getElementById('p-name').value = p.name;
             document.getElementById('p-number').value = p.number;
             document.getElementById('p-pos').value = p.pos;
-            document.getElementById('p-photo').value = p.photo;
             document.getElementById('p-catchphrase').value = p.catchphrase || '';
+            document.getElementById('p-photo-base64').value = p.photo;
+            document.getElementById('photo-preview-container').innerHTML = `<img src="${p.photo}" class="w-full h-full object-cover">`;
             document.getElementById('player-form-title').innerText = "👤 選手情報の編集";
             document.getElementById('player-submit-btn').innerText = "変更を保存する";
             document.getElementById('cancel-player-edit').classList.remove('hidden');
@@ -458,7 +518,9 @@
         function resetPlayerForm() {
             document.getElementById('edit-player-id').value = "";
             document.getElementById('player-reg-form').reset();
-            document.getElementById('player-form-title').innerText = "👤 新規選手登録";
+            document.getElementById('p-photo-base64').value = "";
+            document.getElementById('photo-preview-container').innerHTML = `<span class="text-[10px] text-slate-500">No Img</span>`;
+            document.getElementById('player-form-title').innerText = "👤 新規選手登録 (顔写真トリミング対応)";
             document.getElementById('player-submit-btn').innerText = "選手を登録する";
             document.getElementById('cancel-player-edit').classList.add('hidden');
         }
@@ -466,18 +528,16 @@
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v3', JSON.stringify(players));
+                localStorage.setItem('club_players_v6', JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
 
-        // --- 試合管理ロジック ---
         function renderAdminForm() {
             const selectEl = document.getElementById('admin-formation-select');
             selectEl.value = formation;
             updateLineupSelectors(formation);
 
-            // ベンチメンバー選択 (7枠)
             const benchContainer = document.getElementById('bench-selectors');
             benchContainer.innerHTML = '';
             for (let i = 0; i < 7; i++) {
@@ -555,7 +615,7 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v3', JSON.stringify(historyData));
+                localStorage.setItem('club_history_v6', JSON.stringify(historyData));
                 recalculatePlayerGoals();
                 renderFanSite();
             }
@@ -569,7 +629,7 @@
                     if (pObj) pObj.goals += 1;
                 });
             });
-            localStorage.setItem('club_players_v3', JSON.stringify(players));
+            localStorage.setItem('club_players_v6', JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
@@ -586,7 +646,7 @@
 
             const formData = new FormData(event.target);
             formation = adminFormSelect;
-            localStorage.setItem('club_formation_v3', formation);
+            localStorage.setItem('club_formation_v6', formation);
 
             const template = formationTemplates[formation];
             template.rows.forEach(row => {
@@ -615,9 +675,9 @@
             }
 
             recalculatePlayerGoals();
-            localStorage.setItem('club_lineup_v3', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v3', JSON.stringify(bench));
-            localStorage.setItem('club_history_v3', JSON.stringify(historyData));
+            localStorage.setItem('club_lineup_v6', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v6', JSON.stringify(bench));
+            localStorage.setItem('club_history_v6', JSON.stringify(historyData));
 
             alert('試合データを保存しました！');
             resetMatchForm();
