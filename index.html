@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        club: { dark: '#0f172a', card: '#1e293b', accent: '#10b981', gold: '#f59e0b', sofa: '#1e3a8a', brand: '#881337' }
+                        club: { dark: '#0f172a', card: '#1e293b', accent: '#10b981', gold: '#f59e0b', sofa: '#1e3a8a', brand: '#881337', purple: '#581c87' }
                     }
                 }
             }
@@ -25,13 +25,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center space-x-3">
-                    <span class="text-2xl">⚽</span>
-                    <span class="font-bold text-lg tracking-wider text-club-accent">SOFA PORTAL</span>
+                    <span class="text-2xl">🟣</span>
+                    <span class="font-bold text-lg tracking-wider text-purple-400">SANGA PORTAL</span>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="switchTab('fan')" id="btn-fan" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition">ファンサイト</button>
-                    <button onclick="switchTab('admin')" id="btn-admin" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition">試合管理</button>
-                    <button onclick="switchTab('players')" id="btn-players" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition">選手名簿</button>
+                <div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto">
+                    <button onclick="switchTab('fan')" id="btn-fan" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap">ホーム</button>
+                    <button onclick="switchTab('directory')" id="btn-directory" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition whitespace-nowrap">選手名鑑</button>
+                    <button onclick="switchTab('history')" id="btn-history" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition whitespace-nowrap">試合履歴</button>
+                    <button onclick="switchTab('admin')" id="btn-admin" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition whitespace-nowrap">試合管理</button>
+                    <button onclick="switchTab('players')" id="btn-players" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition whitespace-nowrap">選手編集</button>
                 </div>
             </div>
         </div>
@@ -40,17 +42,17 @@
     <!-- メインコンテンツ -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-        <!-- ==================== ファンサイトビュー ==================== -->
+        <!-- ==================== ファンサイト・ホームビュー ==================== -->
         <div id="view-fan" class="space-y-8">
             <!-- ヒーロー / 次節情報 -->
-            <div class="bg-gradient-to-r from-blue-900 to-club-card rounded-2xl p-6 border border-blue-500/30 shadow-xl">
+            <div class="bg-gradient-to-r from-purple-950 to-club-card rounded-2xl p-6 border border-purple-500/30 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="bg-blue-500/20 text-blue-400 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH (J1 第36節)</span>
+                    <span class="bg-purple-500/20 text-purple-300 text-xs px-3 py-1 rounded-full font-semibold">NEXT MATCH (J1 第36節)</span>
                     <span class="text-xs text-slate-400">2026.11.22 (Sat) 14:00 KO</span>
                 </div>
                 <div class="flex justify-around items-center text-center">
                     <div>
-                        <p class="text-2xl font-black">KYOTO</p>
+                        <p class="text-2xl font-black text-purple-300">KYOTO</p>
                         <p class="text-xs text-slate-400">HOME</p>
                     </div>
                     <div class="text-xl font-bold text-club-gold">VS</div>
@@ -61,84 +63,99 @@
                 </div>
             </div>
 
-            <!-- ★【新機能】公式SNS風 グラフィックカード（スタメン発表） -->
+            <!-- 公式SNS風 グラフィックカード（スタメン発表） -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800 shadow-2xl">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-bold flex items-center gap-2"><span>📱</span> 公式SNS・スタメン発表グラフィック</h2>
                     <span class="text-xs text-slate-400">Matchday 36</span>
                 </div>
 
-                <!-- SNS風グラフィック枠 (ダークワインレッド調) -->
-                <div class="relative bg-gradient-to-br from-rose-950 via-slate-900 to-black border border-rose-500/30 rounded-2xl p-6 overflow-hidden shadow-2xl">
-                    <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl font-black pointer-events-none">XI</div>
+                <div class="relative bg-gradient-to-br from-purple-950 via-slate-900 to-black border border-purple-500/30 rounded-2xl p-6 overflow-hidden shadow-2xl">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl font-black pointer-events-none">SANGA</div>
                     
                     <div class="flex justify-between items-start mb-6">
                         <div>
-                            <p class="text-xs text-rose-400 font-bold tracking-widest uppercase">Official Starting XI</p>
+                            <p class="text-xs text-purple-400 font-bold tracking-widest uppercase">Official Starting XI</p>
                             <h3 class="text-2xl sm:text-3xl font-black tracking-wider text-white mt-1">KYOTO SANGA F.C.</h3>
                         </div>
-                        <div class="bg-rose-900/40 border border-rose-500/40 px-3 py-1 rounded-full text-xs text-rose-300 font-semibold">
+                        <div class="bg-purple-900/40 border border-purple-500/40 px-3 py-1 rounded-full text-xs text-purple-300 font-semibold">
                             J1 LEAGUE
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                        <!-- スタメン選手リスト（背番号＋名前） -->
-                        <div class="space-y-2 bg-black/30 backdrop-blur p-4 rounded-xl border border-white/5" id="social-lineup-list">
-                            <!-- 動的生成 -->
-                        </div>
-                        <!-- ピッチ上のフォーメーションプレビュー -->
+                        <div class="space-y-2 bg-black/30 backdrop-blur p-4 rounded-xl border border-white/5" id="social-lineup-list"></div>
                         <div class="relative bg-emerald-950/40 border border-emerald-600/30 rounded-xl p-4 h-[340px] flex flex-col justify-between items-center overflow-hidden">
                             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-800/20 via-transparent to-black/50 pointer-events-none"></div>
                             <div id="social-pitch-rows" class="w-full h-full flex flex-col justify-between z-10 py-1"></div>
                         </div>
                     </div>
 
-                    <!-- サブメンバー (7名) -->
                     <div class="mt-6 border-t border-white/10 pt-4">
-                        <p class="text-xs font-bold text-rose-300 mb-2">SUB (ベンチメンバー)</p>
+                        <p class="text-xs font-bold text-purple-300 mb-2">SUB (ベンチメンバー)</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2" id="social-bench-list"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ★【新機能】SNS風リアクションフィード (公式・選手・ファンタブ切替) -->
+            <!-- SNS風リアクションフィード -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
                     <h2 class="text-lg font-bold flex items-center gap-2"><span>💬</span> クラブ・SNSフィード</h2>
-                    <!-- タブ切り替えボタン -->
                     <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
-                        <button onclick="filterSocialFeed('all')" id="feed-btn-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-rose-900 text-white transition">すべて</button>
+                        <button onclick="filterSocialFeed('all')" id="feed-btn-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition">すべて</button>
                         <button onclick="filterSocialFeed('official')" id="feed-btn-official" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">公式</button>
                         <button onclick="filterSocialFeed('player')" id="feed-btn-player" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">選手</button>
                         <button onclick="filterSocialFeed('fan')" id="feed-btn-fan" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">ファン</button>
                     </div>
                 </div>
-
-                <!-- タイムライン投稿一覧 -->
-                <div class="space-y-4" id="social-feed-container">
-                    <!-- 動的生成 -->
-                </div>
-            </div>
-
-            <!-- 試合結果履歴 -->
-            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><span>📊</span> 試合結果・スコア履歴</h2>
-                <div class="space-y-3" id="match-history-container"></div>
-            </div>
-
-            <!-- 選手名鑑 -->
-            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><span>👥</span> 登録選手一覧 & スタッツ</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="player-list-container"></div>
+                <div class="space-y-4" id="social-feed-container"></div>
             </div>
         </div>
 
-        <!-- ==================== 選手登録・管理ビュー ==================== -->
+        <!-- ==================== 選手名鑑ビュー (新設タブ) ==================== -->
+        <div id="view-directory" class="space-y-6 hidden">
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📖</span> 京都サンガF.C. 選手名鑑</h2>
+                        <p class="text-xs text-slate-400 mt-1">今季を戦い抜くトップチーム登録全選手のプロフィール＆スタッツ一覧。</p>
+                    </div>
+                    <!-- ポジション絞り込みフィルター -->
+                    <div class="flex gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                        <button onclick="filterDirectory('ALL')" id="dir-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition">全員</button>
+                        <button onclick="filterDirectory('GK')" id="dir-gk" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">GK</button>
+                        <button onclick="filterDirectory('DF')" id="dir-df" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">DF</button>
+                        <button onclick="filterDirectory('MF')" id="dir-mf" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">MF</button>
+                        <button onclick="filterDirectory('FW')" id="dir-fw" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">FW</button>
+                    </div>
+                </div>
+
+                <!-- 選手カードグリッド -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="directory-grid">
+                    <!-- 動的生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 試合履歴ビュー ==================== -->
+        <div id="view-history" class="space-y-6 hidden">
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📊</span> 試合結果・アーカイブ履歴</h2>
+                        <p class="text-xs text-slate-400 mt-1">これまでの全試合のスコア、得点者・アシスト詳細を振り返り、編集・削除が行えます。</p>
+                    </div>
+                </div>
+                <div class="space-y-4" id="dedicated-history-container"></div>
+            </div>
+        </div>
+
+        <!-- ==================== 選手名簿・編集管理ビュー ==================== -->
         <div id="view-players" class="space-y-8 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-club-accent" id="player-form-title">👤 新規選手登録 (顔写真トリミング対応)</h2>
+                    <h2 class="text-xl font-bold text-purple-400" id="player-form-title">👤 新規選手登録・編集</h2>
                     <button type="button" onclick="resetPlayerForm()" id="cancel-player-edit" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">キャンセル</button>
                 </div>
 
@@ -169,11 +186,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">スマホの写真から顔写真を選ぶ（自動円形トリミング）</label>
-                            <input type="file" id="p-image-file" accept="image/*" onchange="processImageFile(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-club-accent file:text-slate-900 hover:file:bg-emerald-400 cursor-pointer">
+                            <input type="file" id="p-image-file" accept="image/*" onchange="processImageFile(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
                         </div>
                         <div class="flex items-center gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
                             <span class="text-xs text-slate-400">プレビュー:</span>
-                            <div id="photo-preview-container" class="w-12 h-12 rounded-full overflow-hidden border-2 border-club-accent bg-slate-800 flex items-center justify-center">
+                            <div id="photo-preview-container" class="w-12 h-12 rounded-full overflow-hidden border-2 border-purple-500 bg-slate-800 flex items-center justify-center">
                                 <span class="text-[10px] text-slate-500">No Img</span>
                             </div>
                         </div>
@@ -184,13 +201,12 @@
                         <input type="text" id="p-catchphrase" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: チームの心臓として攻守に躍動する要">
                     </div>
 
-                    <button type="submit" id="player-submit-btn" class="w-full bg-club-accent text-slate-900 font-bold py-2.5 rounded-lg hover:bg-emerald-400 transition">選手を登録する</button>
+                    <button type="submit" id="player-submit-btn" class="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg hover:bg-purple-500 transition">選手データを保存する</button>
                 </form>
             </div>
 
-            <!-- 登録選手リスト -->
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <h2 class="text-lg font-bold mb-4">📋 登録選手一覧（管理）</h2>
+                <h2 class="text-lg font-bold mb-4">📋 登録選手一覧（編集・削除）</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="admin-player-list"></div>
             </div>
         </div>
@@ -199,7 +215,7 @@
         <div id="view-admin" class="space-y-8 hidden">
             <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-club-accent" id="match-form-title">📝 試合結果 & スタメン・ベンチ入力</h2>
+                    <h2 class="text-xl font-bold text-purple-400" id="match-form-title">📝 試合結果 & スタメン・ベンチ入力</h2>
                     <button type="button" onclick="resetMatchForm()" id="cancel-edit-btn" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">編集キャンセル</button>
                 </div>
 
@@ -209,7 +225,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">大会カテゴリ</label>
-                            <select id="input-competition" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent">
+                            <select id="input-competition" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500">
                                 <option value="Jリーグ">Jリーグ</option>
                                 <option value="ルヴァンカップ">ルヴァンカップ</option>
                                 <option value="天皇杯">天皇杯</option>
@@ -218,38 +234,36 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">ラウンド・節（自由記述）</label>
-                            <input type="text" id="input-round" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent" placeholder="例: 第35節 / 3回戦">
+                            <input type="text" id="input-round" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500" placeholder="例: 第35節 / 3回戦">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">対戦相手</label>
-                            <input type="text" id="input-opponent" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent" placeholder="例: 浦和レッズ">
+                            <input type="text" id="input-opponent" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500" placeholder="例: 浦和レッズ">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">京都 得点</label>
-                            <input type="number" id="input-myscore" min="0" value="1" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent">
+                            <input type="number" id="input-myscore" min="0" value="1" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">相手 得点</label>
-                            <input type="number" id="input-oppscore" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-club-accent">
+                            <input type="number" id="input-oppscore" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500">
                         </div>
                     </div>
 
-                    <!-- 得点記録セクション -->
                     <div class="border-t border-slate-800 pt-4">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-sm font-bold text-club-accent">⚽ 得点・アシスト詳細</label>
+                            <label class="text-sm font-bold text-purple-400">⚽ 得点・アシスト詳細</label>
                             <button type="button" onclick="addGoalField()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded transition">+ 得点を追加</button>
                         </div>
                         <div id="goals-container" class="space-y-3"></div>
                     </div>
 
-                    <!-- フォーメーション選択 & スタメン編成 -->
                     <div class="border-t border-slate-800 pt-4">
                         <div class="flex justify-between items-center mb-3">
-                            <label class="text-sm font-bold text-club-accent">🛡️ スタメン編成</label>
+                            <label class="text-sm font-bold text-purple-400">🛡️ スタメン編成</label>
                             <select id="admin-formation-select" onchange="updateLineupSelectors(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded px-2 py-1">
                                 <option value="3-4-2-1">3-4-2-1</option>
                                 <option value="4-4-2">4-4-2</option>
@@ -262,13 +276,12 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lineup-selectors"></div>
                     </div>
 
-                    <!-- ベンチメンバー編成 (7名) -->
                     <div class="border-t border-slate-800 pt-4">
-                        <label class="block text-sm font-bold text-club-accent mb-3">🪑 ベンチメンバー編成 (7名)</label>
+                        <label class="block text-sm font-bold text-purple-400 mb-3">🪑 ベンチメンバー編成 (7名)</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="bench-selectors"></div>
                     </div>
 
-                    <button type="submit" id="submit-btn" class="w-full bg-club-accent text-slate-900 font-bold py-3 rounded-lg hover:bg-emerald-400 transition shadow-lg">
+                    <button type="submit" id="submit-btn" class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-500 transition shadow-lg">
                         試合を記録して保存する
                     </button>
                 </form>
@@ -278,6 +291,7 @@
     </main>
 
     <script>
+        // 京都サンガF.C. 22名 初期登録データ
         const defaultPlayers = [
             { id: 1, name: "米倉 滉生", number: 1, pos: "GK", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
             { id: 2, name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
@@ -316,109 +330,101 @@
         let currentLineup = { fw: 6, om1: 8, om2: 14, mf1: 7, mf2: 10, mf3: 19, mf4: 9, df1: 2, df2: 4, df3: 3, gk: 1 };
         let currentBench = [11, 12, 13, 15, 16, 17, 18];
 
-        let players = JSON.parse(localStorage.getItem('club_players_v8')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v8') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v8')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v8')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v8')) || [];
-
-        // SNSフィードの初期サンプルデータ（公式・選手・ファン）
-        let socialFeed = JSON.parse(localStorage.getItem('club_social_v8')) || [
-            { type: 'official', author: '京都サンガF.C. 公式', tag: '公式', time: '1時間前', text: '本日のJ1第36節 川崎フロンターレ戦のスターティングイレブンを発表！熱い応援よろしくお願いします！ 🔥', image: null, likes: 1408, comments: 13 },
-            { type: 'player', author: '鶴田 俊哉 (#99)', tag: '選手', time: '30分前', text: '絶対に勝つ。ピッチで躍動する姿を見てほしい。応援頼むぜ！💪⚽', image: null, likes: 890, comments: 24 },
-            { type: 'fan', author: 'サンガ魂のサポ', tag: 'ファン', time: '10分前', text: '今日のスタメン熱すぎんだろ…！ソンポントンチャイのゴールに期待しかない！現地組頼んだぞ！！', image: null, likes: 93, comments: 3 }
+        let players = JSON.parse(localStorage.getItem('club_players_v10')) || defaultPlayers;
+        let formation = localStorage.getItem('club_formation_v10') || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem('club_lineup_v10')) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem('club_bench_v10')) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem('club_history_v10')) || [];
+        let socialFeed = JSON.parse(localStorage.getItem('club_social_v10')) || [
+            { type: 'official', author: '京都サンガF.C. 公式', tag: '公式', time: '1時間前', text: '本日のJ1第36節 川崎フロンターレ戦のスターティングイレブンを発表！', likes: 1408, comments: 13 },
+            { type: 'player', author: '鶴田 俊哉 (#99)', tag: '選手', time: '30分前', text: '絶対に勝つ。ピッチで躍動する姿を見てほしい！', likes: 890, comments: 24 },
+            { type: 'fan', author: 'サンガ魂のサポ', tag: 'ファン', time: '10分前', text: '今日のスタメン熱すぎんだろ…！勝利を頼むぞ！', likes: 93, comments: 3 }
         ];
 
+        // タブ切り替え制御
         function switchTab(tab) {
-            document.getElementById('view-fan').classList.add('hidden');
-            document.getElementById('view-admin').classList.add('hidden');
-            document.getElementById('view-players').classList.add('hidden');
-            document.getElementById('btn-fan').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition";
-            document.getElementById('btn-admin').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition";
-            document.getElementById('btn-players').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition";
+            ['view-fan', 'view-directory', 'view-history', 'view-admin', 'view-players'].forEach(v => {
+                document.getElementById(v).classList.add('hidden');
+            });
+            ['btn-fan', 'btn-directory', 'btn-history', 'btn-admin', 'btn-players'].forEach(b => {
+                document.getElementById(b).className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition whitespace-nowrap";
+            });
 
             if (tab === 'fan') {
                 document.getElementById('view-fan').classList.remove('hidden');
-                document.getElementById('btn-fan').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition";
+                document.getElementById('btn-fan').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
                 renderFanSite();
+            } else if (tab === 'directory') {
+                document.getElementById('view-directory').classList.remove('hidden');
+                document.getElementById('btn-directory').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
+                renderPlayerDirectory('ALL');
+            } else if (tab === 'history') {
+                document.getElementById('view-history').classList.remove('hidden');
+                document.getElementById('btn-history').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
+                renderDedicatedHistory();
             } else if (tab === 'admin') {
                 document.getElementById('view-admin').classList.remove('hidden');
-                document.getElementById('btn-admin').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition";
+                document.getElementById('btn-admin').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
                 renderAdminForm();
             } else if (tab === 'players') {
                 document.getElementById('view-players').classList.remove('hidden');
-                document.getElementById('btn-players').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition";
+                document.getElementById('btn-players').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
                 renderPlayerManagement();
             }
         }
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v8', formation);
+            localStorage.setItem('club_formation_v10', formation);
             renderFanSite();
         }
 
         function renderFanSite() {
+            document.getElementById('tactics-formation-select').value = formation;
             renderSocialCardAndPitch();
             renderSocialFeed('all');
+        }
 
-            const historyContainer = document.getElementById('match-history-container');
-            historyContainer.innerHTML = '';
-            if (historyData.length === 0) {
-                historyContainer.innerHTML = `<p class="text-xs text-slate-500">まだ試合結果が記録されていません。「試合管理」タブから記録を追加してください。</p>`;
-            } else {
-                historyData.forEach((m, idx) => {
-                    let badgeColor = m.result === 'WIN' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (m.result === 'DRAW' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30');
-                    let goalsHtml = m.goals.map(g => {
-                        const gp = players.find(x => x.name === g.scorer);
-                        const photoHtml = gp ? `<img src="${gp.photo}" class="w-5 h-5 rounded-full object-cover">` : '⚽';
-                        let assistText = g.assister ? ` (A: ${g.assister})` : '';
-                        return `<span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300 flex items-center gap-1.5">${photoHtml} ${g.scorer} (${g.time})${assistText}</span>`;
-                    }).join(' ');
+        // 選手名鑑タブの描画（ポジションフィルター対応）
+        function renderPlayerDirectory(posFilter) {
+            ['dir-all', 'dir-gk', 'dir-df', 'dir-mf', 'dir-fw'].forEach(id => {
+                document.getElementById(id).className = "px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
+            });
+            if (posFilter === 'ALL') document.getElementById('dir-all').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'GK') document.getElementById('dir-gk').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'DF') document.getElementById('dir-df').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'MF') document.getElementById('dir-mf').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'FW') document.getElementById('dir-fw').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
 
-                    historyContainer.innerHTML += `
-                        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                            <div class="flex items-center gap-3">
-                                <span class="text-xs px-2.5 py-1 rounded-full font-bold border ${badgeColor}">${m.result}</span>
-                                <div>
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-0.5 rounded font-bold">${m.competition} : ${m.round}</span>
-                                        <span class="text-[10px] text-slate-400">${m.date}</span>
-                                    </div>
-                                    <p class="text-sm font-bold text-white">vs ${m.opponent} <span class="text-club-gold text-base ml-2">${m.myScore} - ${m.oppScore}</span></p>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-2">
-                                <div class="flex flex-wrap gap-1">${goalsHtml || '<span class="text-xs text-slate-500">得点なし</span>'}</div>
-                                <button onclick="editMatch(${idx})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded transition">編集</button>
-                                <button onclick="deleteMatch(${idx})" class="text-xs bg-red-900/30 hover:bg-red-900/50 text-red-400 px-2 py-1 rounded transition">削除</button>
-                            </div>
-                        </div>
-                    `;
-                });
+            const grid = document.getElementById('directory-grid');
+            grid.innerHTML = '';
+
+            const targetPlayers = posFilter === 'ALL' ? players : players.filter(p => p.pos === posFilter);
+
+            if (targetPlayers.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-slate-500 col-span-3 text-center py-8">該当する選手がいません。</p>`;
+                return;
             }
 
-            const container = document.getElementById('player-list-container');
-            container.innerHTML = '';
-            players.forEach(p => {
-                container.innerHTML += `
-                    <div class="bg-club-card border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-lg">
+            targetPlayers.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
-                                    <img src="${p.photo}" class="w-12 h-12 rounded-full object-cover border-2 border-club-accent shadow">
+                                    <img src="${p.photo}" class="w-14 h-14 rounded-full object-cover border-2 border-purple-500 shadow-md">
                                     <div>
-                                        <span class="bg-club-accent/20 text-club-accent text-[10px] font-bold px-2 py-0.5 rounded">#${p.number} ${p.pos}</span>
-                                        <h3 class="font-bold text-base mt-0.5">${p.name}</h3>
+                                        <span class="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded">#${p.number} [${p.pos}]</span>
+                                        <h3 class="font-black text-lg mt-1 text-white">${p.name}</h3>
                                     </div>
                                 </div>
-                                <div class="text-right text-xs text-slate-400">
+                                <div class="text-right text-xs">
                                     <span class="text-club-gold font-bold">⚽ ${p.goals}G</span> / <span class="text-emerald-400 font-bold">${p.assists}A</span>
                                 </div>
                             </div>
-                            <p class="text-xs text-slate-300 italic bg-slate-800/50 p-2 rounded border-l-2 border-club-accent mb-3">「${p.catchphrase || '特になし'}」</p>
+                            <p class="text-xs text-slate-300 italic bg-slate-950/60 p-3 rounded-xl border-l-2 border-purple-500 mb-3">「${p.catchphrase || '特になし'}」</p>
                         </div>
-                        <div class="text-[10px] text-slate-400 flex justify-between border-t border-slate-800 pt-2">
+                        <div class="text-[10px] text-slate-400 flex justify-between border-t border-slate-800 pt-2.5">
                             <span>SOFA RATING: <strong class="text-white">7.42</strong></span>
                             <span class="text-emerald-400 font-semibold">好調</span>
                         </div>
@@ -427,9 +433,52 @@
             });
         }
 
-        // 公式SNS風カードとピッチ＆ベンチの連動描画
+        function filterDirectory(pos) {
+            renderPlayerDirectory(pos);
+        }
+
+        // 専用の「試合履歴」タブ
+        function renderDedicatedHistory() {
+            const container = document.getElementById('dedicated-history-container');
+            container.innerHTML = '';
+            if (historyData.length === 0) {
+                container.innerHTML = `<p class="text-sm text-slate-500 text-center py-8">まだ試合結果が記録されていません。「試合管理」タブから新しい試合を追加してください。</p>`;
+            } else {
+                historyData.forEach((m, idx) => {
+                    let badgeColor = m.result === 'WIN' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (m.result === 'DRAW' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30');
+                    let goalsHtml = m.goals.map(g => {
+                        const gp = players.find(x => x.name === g.scorer);
+                        const photoHtml = gp ? `<img src="${gp.photo}" class="w-5 h-5 rounded-full object-cover">` : '⚽';
+                        let assistText = g.assister ? ` (A: ${g.assister})` : '';
+                        return `<span class="text-xs bg-slate-800 px-2 py-1.5 rounded text-slate-300 flex items-center gap-1.5">${photoHtml} ${g.scorer} (${g.time})${assistText}</span>`;
+                    }).join(' ');
+
+                    container.innerHTML += `
+                        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs px-3 py-1.5 rounded-full font-bold border ${badgeColor}">${m.result}</span>
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="bg-purple-500/20 text-purple-300 text-[10px] px-2 py-0.5 rounded font-bold">${m.competition} : ${m.round}</span>
+                                        <span class="text-xs text-slate-400">${m.date}</span>
+                                    </div>
+                                    <p class="text-lg font-black text-white">vs ${m.opponent} <span class="text-club-gold text-xl ml-3">${m.myScore} - ${m.oppScore}</span></p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
+                                <div class="flex flex-wrap gap-1.5">${goalsHtml || '<span class="text-xs text-slate-500">得点なし</span>'}</div>
+                                <div class="flex gap-2">
+                                    <button onclick="editMatch(${idx})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg transition font-bold">編集</button>
+                                    <button onclick="deleteMatch(${idx})" class="text-xs bg-red-900/30 hover:bg-red-900/50 text-red-400 px-3 py-1.5 rounded-lg transition font-bold">削除</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
         function renderSocialCardAndPitch() {
-            // 1. スタメンリスト (SNS風テキスト表示)
             const listContainer = document.getElementById('social-lineup-list');
             listContainer.innerHTML = '';
             Object.values(lineup).forEach(pId => {
@@ -437,7 +486,7 @@
                 if (p) {
                     listContainer.innerHTML += `
                         <div class="flex items-center justify-between text-xs border-b border-white/5 pb-1">
-                            <span class="font-bold text-rose-300">#${p.number}</span>
+                            <span class="font-bold text-purple-300">#${p.number}</span>
                             <span class="font-medium text-white flex-1 ml-3">${p.name}</span>
                             <span class="text-[10px] text-slate-400">${p.pos}</span>
                         </div>
@@ -445,7 +494,6 @@
                 }
             });
 
-            // 2. ピッチグラフィック
             const pitchContainer = document.getElementById('social-pitch-rows');
             pitchContainer.innerHTML = '';
             const template = formationTemplates[formation] || formationTemplates["3-4-2-1"];
@@ -459,7 +507,7 @@
                         rowHtml += `
                             <div class="flex flex-col items-center bg-slate-900/90 border border-emerald-500/50 px-2 py-1 rounded-xl shadow">
                                 <img src="${p.photo}" class="w-6 h-6 rounded-full object-cover border border-emerald-400 mb-0.5">
-                                <span class="text-[8px] text-rose-400 font-bold">#${p.number}</span>
+                                <span class="text-[8px] text-purple-300 font-bold">#${p.number}</span>
                                 <span class="text-[9px] font-bold text-white whitespace-nowrap">${p.name.split(' ')[0]}</span>
                             </div>
                         `;
@@ -469,7 +517,6 @@
                 pitchContainer.innerHTML += rowHtml;
             });
 
-            // 3. ベンチメンバー
             const benchContainer = document.getElementById('social-bench-list');
             benchContainer.innerHTML = '';
             bench.forEach(id => {
@@ -477,7 +524,7 @@
                 if (p) {
                     benchContainer.innerHTML += `
                         <div class="bg-black/40 border border-white/10 p-1.5 rounded-lg flex items-center gap-1.5">
-                            <span class="text-[9px] text-rose-300 font-bold">#${p.number}</span>
+                            <span class="text-[9px] text-purple-300 font-bold">#${p.number}</span>
                             <p class="text-[11px] font-bold text-white truncate">${p.name.split(' ')[0]}</p>
                         </div>
                     `;
@@ -485,12 +532,11 @@
             });
         }
 
-        // SNSフィードのタブ切り替えフィルター
         function filterSocialFeed(type) {
             ['all', 'official', 'player', 'fan'].forEach(t => {
                 const btn = document.getElementById(`feed-btn-${t}`);
                 if (t === type) {
-                    btn.className = "px-3 py-1 text-xs font-bold rounded-lg bg-rose-900 text-white transition";
+                    btn.className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
                 } else {
                     btn.className = "px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
                 }
@@ -498,11 +544,10 @@
 
             const container = document.getElementById('social-feed-container');
             container.innerHTML = '';
-
             const filtered = type === 'all' ? socialFeed : socialFeed.filter(x => x.type === type);
 
             filtered.forEach(item => {
-                let badgeBg = item.type === 'official' ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : (item.type === 'player' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-blue-500/20 text-blue-400 border-blue-500/30');
+                let badgeBg = item.type === 'official' ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' : (item.type === 'player' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-blue-500/20 text-blue-400 border-blue-500/30');
 
                 container.innerHTML += `
                     <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3">
@@ -561,9 +606,9 @@
                 listEl.innerHTML += `
                     <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <img src="${p.photo}" class="w-10 h-10 rounded-full object-cover border border-club-accent">
+                            <img src="${p.photo}" class="w-10 h-10 rounded-full object-cover border border-purple-500">
                             <div>
-                                <span class="text-[10px] text-club-accent font-bold">#${p.number} [${p.pos}]</span>
+                                <span class="text-[10px] text-purple-400 font-bold">#${p.number} [${p.pos}]</span>
                                 <p class="text-sm font-bold text-white">${p.name}</p>
                             </div>
                         </div>
@@ -602,13 +647,14 @@
                 players.push({ id: newId, name, number, pos, goals: 0, assists: 0, photo, catchphrase });
             }
 
-            localStorage.setItem('club_players_v8', JSON.stringify(players));
+            localStorage.setItem('club_players_v10', JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
         }
 
         function editPlayer(id) {
+            switchTab('players');
             const p = players.find(x => x.id == id);
             if (!p) return;
             document.getElementById('edit-player-id').value = p.id;
@@ -628,15 +674,15 @@
             document.getElementById('player-reg-form').reset();
             document.getElementById('p-photo-base64').value = "";
             document.getElementById('photo-preview-container').innerHTML = `<span class="text-[10px] text-slate-500">No Img</span>`;
-            document.getElementById('player-form-title').innerText = "👤 新規選手登録 (顔写真トリミング対応)";
-            document.getElementById('player-submit-btn').innerText = "選手を登録する";
+            document.getElementById('player-form-title').innerText = "👤 新規選手登録・編集";
+            document.getElementById('player-submit-btn').innerText = "選手データを保存する";
             document.getElementById('cancel-player-edit').classList.add('hidden');
         }
 
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v8', JSON.stringify(players));
+                localStorage.setItem('club_players_v10', JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
@@ -739,9 +785,10 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v8', JSON.stringify(historyData));
+                localStorage.setItem('club_history_v10', JSON.stringify(historyData));
                 recalculatePlayerStats();
                 renderFanSite();
+                renderDedicatedHistory();
             }
         }
 
@@ -757,7 +804,7 @@
                     }
                 });
             });
-            localStorage.setItem('club_players_v8', JSON.stringify(players));
+            localStorage.setItem('club_players_v10', JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
@@ -804,7 +851,6 @@
                 const today = new Date().toISOString().split('T')[0].replace(/-/g, '.');
                 historyData.unshift({ competition, round, opponent, myScore, oppScore, result, date: today, goals: goalRecords });
                 
-                // 試合結果に連動したSNS風リアクションを自動生成して追加！
                 socialFeed.unshift({
                     type: 'fan',
                     author: '熱狂サポ #12',
@@ -814,17 +860,17 @@
                     likes: 1,
                     comments: 0
                 });
-                localStorage.setItem('club_social_v8', JSON.stringify(socialFeed));
+                localStorage.setItem('club_social_v10', JSON.stringify(socialFeed));
             }
 
             recalculatePlayerStats();
-            localStorage.setItem('club_lineup_v8', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v8', JSON.stringify(bench));
-            localStorage.setItem('club_history_v8', JSON.stringify(historyData));
+            localStorage.setItem('club_lineup_v10', JSON.stringify(lineup));
+            localStorage.setItem('club_bench_v10', JSON.stringify(bench));
+            localStorage.setItem('club_history_v10', JSON.stringify(historyData));
 
-            alert('試合データを保存し、SNSフィードに速報を反映しました！');
+            alert('試合データを保存しました！');
             resetMatchForm();
-            switchTab('fan');
+            switchTab('history');
         }
 
         renderFanSite();
