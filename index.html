@@ -112,20 +112,25 @@
             </div>
         </div>
 
-        <!-- ==================== 選手名鑑ビュー ==================== -->
+        <!-- ==================== 選手名鑑ビュー (チーム別タブ ＆ ポジション別) ==================== -->
         <div id="view-directory" class="space-y-6 hidden">
-            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📖</span> 選手名鑑（背番号順）</h2>
-                        <p class="text-xs text-slate-400 mt-1">カードをタップすると詳細プロフィール・キャリア成績を確認できます。</p>
-                    </div>
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2"><span>📖</span> 選手名鑑</h2>
+                    <p class="text-xs text-slate-400 mt-1">チームごとに切り替え、背番号順に選手情報を閲覧できます。</p>
+                </div>
+
+                <!-- チーム選択タブ（動的生成） -->
+                <div class="flex flex-wrap gap-2 pb-2 border-b border-slate-800" id="directory-team-tabs"></div>
+
+                <!-- ポジション絞り込み ＆ 検索 -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div class="flex gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
-                        <button onclick="filterDirectory('ALL')" id="dir-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition">全員</button>
-                        <button onclick="filterDirectory('GK')" id="dir-gk" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">GK</button>
-                        <button onclick="filterDirectory('DF')" id="dir-df" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">DF</button>
-                        <button onclick="filterDirectory('MF')" id="dir-mf" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">MF</button>
-                        <button onclick="filterDirectory('FW')" id="dir-fw" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">FW</button>
+                        <button onclick="filterDirectoryPos('ALL')" id="dir-pos-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition">全員</button>
+                        <button onclick="filterDirectoryPos('GK')" id="dir-pos-gk" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">GK</button>
+                        <button onclick="filterDirectoryPos('DF')" id="dir-pos-df" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">DF</button>
+                        <button onclick="filterDirectoryPos('MF')" id="dir-pos-mf" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">MF</button>
+                        <button onclick="filterDirectoryPos('FW')" id="dir-pos-fw" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">FW</button>
                     </div>
                 </div>
 
@@ -146,12 +151,26 @@
             </div>
         </div>
 
-        <!-- ==================== 選手名簿・編集管理ビュー ==================== -->
+        <!-- ==================== 選手名簿・編集管理ビュー (データバックアップ機能付き) ==================== -->
         <div id="view-players" class="space-y-8 hidden">
-            <div class="bg-club-card rounded-2xl p-6 border border-slate-800">
-                <div class="flex justify-between items-center mb-4">
+            <div class="bg-club-card rounded-2xl p-6 border border-slate-800 space-y-4">
+                <div class="flex justify-between items-center">
                     <h2 class="text-xl font-bold text-purple-400" id="player-form-title">👤 新規選手登録・詳細編集</h2>
                     <button type="button" onclick="resetPlayerForm()" id="cancel-player-edit" class="hidden text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded">キャンセル</button>
+                </div>
+
+                <!-- データバックアップ・復元ツールバー -->
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-bold text-white">💾 データ保護・バックアップ</p>
+                        <p class="text-[10px] text-slate-400">コードを更新してもデータが消えないよう、定期的に保存・復元できます。</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="exportData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-purple-300 px-3 py-1.5 rounded-lg transition font-bold">データを保存(エクスポート)</button>
+                        <label class="text-xs bg-slate-800 hover:bg-slate-700 text-emerald-300 px-3 py-1.5 rounded-lg transition font-bold cursor-pointer">
+                            データを復元<input type="file" accept=".json" onchange="importData(this)" class="hidden">
+                        </label>
+                    </div>
                 </div>
 
                 <form id="player-reg-form" onsubmit="handlePlayerSubmit(event)" class="space-y-4">
@@ -162,7 +181,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">チーム名</label>
-                            <input type="text" id="p-team" required value="京都サンガF.C." class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white">
+                            <input type="text" id="p-team" required value="京都サンガF.C." class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 京都サンガF.C.">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">選手名</label>
@@ -186,7 +205,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">生年月日</label>
-                            <input type="text" id="p-birth" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 1990/12/26">
+                            <input type="text" id="p-birth" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 1995/05/12">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">利き足</label>
@@ -205,7 +224,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">今季の目標</label>
-                            <input type="text" id="p-goal" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: ケガをしない、成長する">
+                            <input type="text" id="p-goal" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-white" placeholder="例: 無失点での勝利">
                         </div>
                     </div>
 
@@ -333,7 +352,13 @@
     </div>
 
     <script>
-        // 京都サンガF.C. 選手データ（1番を米倉選手、38番に吉村選手を追加）
+        // 固定のストレージキー名を採用（データが勝手に消えない仕様）
+        const STORAGE_KEY_PLAYERS = 'club_portal_players_stable';
+        const STORAGE_KEY_HISTORY = 'club_portal_history_stable';
+        const STORAGE_KEY_LINEUP = 'club_portal_lineup_stable';
+        const STORAGE_KEY_BENCH = 'club_portal_bench_stable';
+        const STORAGE_KEY_FORMATION = 'club_portal_formation_stable';
+
         const defaultPlayers = [
             { id: 1, team: "京都サンガF.C.", name: "米倉 滉生", number: 1, pos: "GK", goals: 0, assists: 0, birth: "1995/05/12", foot: "右", friends: "―", numCommit: "キーパーといえば", goal: "無失点での勝利に貢献する", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "不屈の守護神。抜群のコーチングで最終ラインを引き締める。" },
             { id: 2, team: "京都サンガF.C.", name: "大久保 貴宜", number: 2, pos: "DF", goals: 0, assists: 0, birth: "1997/03/15", foot: "右", friends: "―", numCommit: "特になし", goal: "レギュラー定着", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "対人守備の強さと安定したカバーリングが売りの守備職人。" },
@@ -353,10 +378,10 @@
             { id: 16, team: "京都サンガF.C.", name: "岡本 武蔵", number: 26, pos: "DF", goals: 0, assists: 0, birth: "2000/09/09", foot: "右", friends: "―", numCommit: "特になし", goal: "ハードワークでアピール", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "献身的な守備とハードワークでチームを支えるユーティリティ。" },
             { id: 17, team: "京都サンガF.C.", name: "三島 眞也", number: 27, pos: "MF", goals: 0, assists: 0, birth: "1997/04/14", foot: "右", friends: "―", numCommit: "特になし", goal: "中盤の底でゲームを引き締める", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "献身的な守備と機敏な判断力で中盤を引き締めるマルチMF。" },
             { id: 18, team: "京都サンガF.C.", name: "高城 有哉", number: 28, pos: "DF", goals: 0, assists: 0, birth: "2002/03/03", foot: "右", friends: "―", numCommit: "特になし", goal: "若さ爆発のプレー", photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "果敢なアプローチと粘り強いディフェンスが持ち味の若手DF。" },
-            { id: 19, team: "京都サンガF.C.", name: "宮内 修斗", number: 32, pos: "MF", goals: 0, assists: 0, birth: "2000/10/20", foot: "左", friends: "―", numCommit: "特になし", goal: "チャンスメイク", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", catchphrase: "鋭いターンとアイデアあふれるパスで攻撃のアクセントとなるMF。" },
+            { id: 19, team: "京都サンガF.C.", name: "宮内 修斗", number: 32, pos: "MF", goals: 0, assists: 0, birth: "2000/10/20", foot: "左", friends: "―", numCommit: "特になし", goal: "チャンスメイク", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "鋭いターンとアイデアあふれるパスで攻撃のアクセントとなるMF。" },
             { id: 20, team: "京都サンガF.C.", name: "吉村 瑞希", number: 38, pos: "GK", goals: 0, assists: 0, birth: "2001/12/01", foot: "右", friends: "―", numCommit: "思い入れのある番号", goal: "正GKの座を奪う", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "闘志あふれるセービングが売りの若きゴールキーパー。" },
             { id: 21, team: "京都サンガF.C.", name: "笠原 健吾", number: 50, pos: "DF", goals: 0, assists: 0, birth: "1991/08/15", foot: "右", friends: "―", numCommit: "特になし", goal: "チームを牽引する", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "ベテランならではの統率力で最終ラインを統括するリーダー。" },
-            { id: 22, team: "京都サンガF.C.", name: "青山 京祐", number: 55, pos: "DF", goals: 0, assists: 0, birth: "1994/06/19", foot: "右", friends: "―", numCommit: "特になし", goal: "無失点にこだわる", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", catchphrase: "高さを活かしたヘディングと堅実な守備対応でゴールを守る。" },
+            { id: 22, team: "京都サンガF.C.", name: "青山 京祐", number: 55, pos: "DF", goals: 0, assists: 0, birth: "1994/06/19", foot: "右", friends: "―", numCommit: "特になし", goal: "無失点にこだわる", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "高さを活かしたヘディングと堅実な守備対応でゴールを守る。" },
             { id: 23, team: "京都サンガF.C.", name: "鶴田 俊哉", number: 99, pos: "FW", goals: 0, assists: 0, birth: "1995/03/30", foot: "右", friends: "―", numCommit: "特別な番号", goal: "チームをJ1上位へ導く", photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80", careerImg: "", catchphrase: "圧倒的な突破力とシュートセンスでチームを勝利に導くエース。" }
         ];
 
@@ -373,16 +398,19 @@
         let currentLineup = { fw: 6, om1: 8, om2: 14, mf1: 7, mf2: 10, mf3: 19, mf4: 9, df1: 2, df2: 4, df3: 3, gk: 1 };
         let currentBench = [11, 12, 13, 15, 16, 17, 18];
 
-        let players = JSON.parse(localStorage.getItem('club_players_v12')) || defaultPlayers;
-        let formation = localStorage.getItem('club_formation_v12') || currentFormation;
-        let lineup = JSON.parse(localStorage.getItem('club_lineup_v12')) || currentLineup;
-        let bench = JSON.parse(localStorage.getItem('club_bench_v12')) || currentBench;
-        let historyData = JSON.parse(localStorage.getItem('club_history_v12')) || [];
-        let socialFeed = JSON.parse(localStorage.getItem('club_social_v12')) || [
+        let players = JSON.parse(localStorage.getItem(STORAGE_KEY_PLAYERS)) || defaultPlayers;
+        let formation = localStorage.getItem(STORAGE_KEY_FORMATION) || currentFormation;
+        let lineup = JSON.parse(localStorage.getItem(STORAGE_KEY_LINEUP)) || currentLineup;
+        let bench = JSON.parse(localStorage.getItem(STORAGE_KEY_BENCH)) || currentBench;
+        let historyData = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY)) || [];
+        let socialFeed = JSON.parse(localStorage.getItem('club_social_stable')) || [
             { type: 'official', author: '京都サンガF.C. 公式', tag: '公式', time: '1時間前', text: '本日のJ1第36節 川崎フロンターレ戦のスターティングイレブンを発表！', likes: 1408, comments: 13 },
             { type: 'player', author: '鶴田 俊哉 (#99)', tag: '選手', time: '30分前', text: '絶対に勝つ。ピッチで躍動する姿を見てほしい！', likes: 890, comments: 24 },
             { type: 'fan', author: 'サンガ魂のサポ', tag: 'ファン', time: '10分前', text: '今日のスタメン熱すぎんだろ…！勝利を頼むぞ！', likes: 93, comments: 3 }
         ];
+
+        let currentSelectedTeam = "京都サンガF.C.";
+        let currentPosFilter = "ALL";
 
         function switchTab(tab) {
             ['view-fan', 'view-directory', 'view-history', 'view-admin', 'view-players'].forEach(v => {
@@ -399,7 +427,8 @@
             } else if (tab === 'directory') {
                 document.getElementById('view-directory').classList.remove('hidden');
                 document.getElementById('btn-directory').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
-                renderPlayerDirectory('ALL');
+                renderTeamTabs();
+                renderPlayerDirectory(currentSelectedTeam, currentPosFilter);
             } else if (tab === 'history') {
                 document.getElementById('view-history').classList.remove('hidden');
                 document.getElementById('btn-history').className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-club-accent text-slate-900 transition whitespace-nowrap";
@@ -417,7 +446,7 @@
 
         function changeFormation(val) {
             formation = val;
-            localStorage.setItem('club_formation_v12', formation);
+            localStorage.setItem(STORAGE_KEY_FORMATION, formation);
             renderFanSite();
         }
 
@@ -427,26 +456,51 @@
             renderSocialFeed('all');
         }
 
-        // 選手名鑑（背番号順に自動ソート）
-        function renderPlayerDirectory(posFilter) {
-            ['dir-all', 'dir-gk', 'dir-df', 'dir-mf', 'dir-fw'].forEach(id => {
+        // チーム別タブの自動生成
+        function renderTeamTabs() {
+            const tabsContainer = document.getElementById('directory-team-tabs');
+            tabsContainer.innerHTML = '';
+
+            // 登録されている選手からチーム名を重複なく抽出
+            const teams = [...new Set(players.map(p => p.team || "京都サンガF.C."))];
+
+            teams.forEach(team => {
+                let isActive = team === currentSelectedTeam;
+                let btnClass = isActive ? "px-3 py-1.5 text-xs font-bold rounded-xl bg-purple-600 text-white shadow" : "px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition";
+                tabsContainer.innerHTML += `<button onclick="selectTeamTab('${team}')" class="${btnClass}">${team}</button>`;
+            });
+        }
+
+        function selectTeamTab(team) {
+            currentSelectedTeam = team;
+            renderTeamTabs();
+            renderPlayerDirectory(currentSelectedTeam, currentPosFilter);
+        }
+
+        // 選手名鑑（チーム別 ＆ 背番号順ソート）
+        function renderPlayerDirectory(teamName, posFilter) {
+            currentSelectedTeam = teamName;
+            currentPosFilter = posFilter;
+
+            ['dir-pos-all', 'dir-pos-gk', 'dir-pos-df', 'dir-pos-mf', 'dir-pos-fw'].forEach(id => {
                 document.getElementById(id).className = "px-3 py-1 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
             });
-            if (posFilter === 'ALL') document.getElementById('dir-all').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
-            if (posFilter === 'GK') document.getElementById('dir-gk').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
-            if (posFilter === 'DF') document.getElementById('dir-df').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
-            if (posFilter === 'MF') document.getElementById('dir-mf').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
-            if (posFilter === 'FW') document.getElementById('dir-fw').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'ALL') document.getElementById('dir-pos-all').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'GK') document.getElementById('dir-pos-gk').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'DF') document.getElementById('dir-pos-df').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'MF') document.getElementById('dir-pos-mf').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
+            if (posFilter === 'FW') document.getElementById('dir-pos-fw').className = "px-3 py-1 text-xs font-bold rounded-lg bg-purple-900 text-white transition";
 
             const grid = document.getElementById('directory-grid');
             grid.innerHTML = '';
 
-            // 背番号（number）の昇順に並び替え
-            let sortedPlayers = [...players].sort((a, b) => Number(a.number) - Number(b.number));
-            const targetPlayers = posFilter === 'ALL' ? sortedPlayers : sortedPlayers.filter(p => p.pos === posFilter);
+            // 該当チームの選手を抽出して背番号順にソート
+            let teamPlayers = players.filter(p => (p.team || "京都サンガF.C.") === teamName);
+            let sortedPlayers = teamPlayers.sort((a, b) => Number(a.number) - Number(b.number));
+            let targetPlayers = posFilter === 'ALL' ? sortedPlayers : sortedPlayers.filter(p => p.pos === posFilter);
 
             if (targetPlayers.length === 0) {
-                grid.innerHTML = `<p class="text-xs text-slate-500 col-span-3 text-center py-8">該当する選手がいません。</p>`;
+                grid.innerHTML = `<p class="text-xs text-slate-500 col-span-3 text-center py-8">このチームに該当する選手がいません。</p>`;
                 return;
             }
 
@@ -469,25 +523,25 @@
                             <p class="text-xs text-slate-300 italic bg-slate-950/60 p-3 rounded-xl border-l-2 border-purple-500 mb-3">「${p.catchphrase || '特になし'}」</p>
                         </div>
                         <div class="text-[10px] text-purple-400 font-bold flex justify-between border-t border-slate-800 pt-2.5">
-                            <span>詳細プロフィール・キャリアを見る →</span>
-                            <span>${p.team || '京都サンガF.C.'}</span>
+                            <span>詳細プロフィールを見る →</span>
+                            <span>${p.team}</span>
                         </div>
                     </div>
                 `;
             });
         }
 
-        function filterDirectory(pos) {
-            renderPlayerDirectory(pos);
+        function filterDirectoryPos(pos) {
+            renderPlayerDirectory(currentSelectedTeam, pos);
         }
 
-        // 選手詳細ポップアップ（公式HP風プロフィール＋キャリア画像）
+        // 選手詳細ポップアップ
         function openPlayerModal(id) {
             const p = players.find(x => x.id == id);
             if (!p) return;
 
             const modalContent = document.getElementById('modal-content');
-            let careerHtml = p.careerImg ? `<img src="${p.careerImg}" class="w-full rounded-xl border border-slate-700 shadow-md">` : `<p class="text-xs text-slate-500 text-center py-6 bg-slate-900/50 rounded-xl">キャリア成績の画像が未登録です。「選手編集」タブから登録できます。</p>`;
+            let careerHtml = p.careerImg ? `<img src="${p.careerImg}" class="w-full rounded-xl border border-slate-700 shadow-md">` : `<p class="text-xs text-slate-500 text-center py-6 bg-slate-900/50 rounded-xl">キャリア成績の画像が未登録です。</p>`;
 
             modalContent.innerHTML = `
                 <div class="flex items-center gap-4 border-b border-slate-800 pb-5">
@@ -534,15 +588,57 @@
             document.getElementById('player-modal').classList.add('hidden');
         }
 
-        function processCareerImage(input) {
+        // データのバックアップ（エクスポート）
+        function exportData() {
+            const data = {
+                players: players,
+                history: historyData,
+                lineup: lineup,
+                bench: bench,
+                formation: formation
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sanga_portal_backup.json';
+            a.click();
+        }
+
+        // データの復元（インポート）
+        function importData(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const base64Data = e.target.result;
-                    document.getElementById('p-career-base64').value = base64Data;
-                    document.getElementById('career-preview-container').innerHTML = `<img src="${base64Data}" class="w-full h-full object-contain">`;
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.players) {
+                            players = data.players;
+                            localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
+                        }
+                        if (data.history) {
+                            historyData = data.history;
+                            localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(historyData));
+                        }
+                        if (data.lineup) {
+                            lineup = data.lineup;
+                            localStorage.setItem(STORAGE_KEY_LINEUP, JSON.stringify(lineup));
+                        }
+                        if (data.bench) {
+                            bench = data.bench;
+                            localStorage.setItem(STORAGE_KEY_BENCH, JSON.stringify(bench));
+                        }
+                        if (data.formation) {
+                            formation = data.formation;
+                            localStorage.setItem(STORAGE_KEY_FORMATION, formation);
+                        }
+                        alert('データを正常に復元しました！');
+                        renderFanSite();
+                    } catch (err) {
+                        alert('ファイルの読み込みに失敗しました。正しいバックアップファイルを選択してください。');
+                    }
                 }
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsText(input.files[0]);
             }
         }
 
@@ -550,7 +646,7 @@
             const container = document.getElementById('dedicated-history-container');
             container.innerHTML = '';
             if (historyData.length === 0) {
-                container.innerHTML = `<p class="text-sm text-slate-500 text-center py-8">まだ試合結果が記録されていません。「試合管理」タブから新しい試合を追加してください。</p>`;
+                container.innerHTML = `<p class="text-sm text-slate-500 text-center py-8">まだ試合結果が記録されていません。</p>`;
             } else {
                 historyData.forEach((m, idx) => {
                     let badgeColor = m.result === 'WIN' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (m.result === 'DRAW' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30');
@@ -707,6 +803,18 @@
             }
         }
 
+        function processCareerImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Data = e.target.result;
+                    document.getElementById('p-career-base64').value = base64Data;
+                    document.getElementById('career-preview-container').innerHTML = `<img src="${base64Data}" class="w-full h-full object-contain">`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function renderPlayerManagement() {
             const listEl = document.getElementById('admin-player-list');
             listEl.innerHTML = '';
@@ -719,7 +827,7 @@
                             <img src="${p.photo}" class="w-10 h-10 rounded-full object-cover border border-purple-500">
                             <div>
                                 <span class="text-[10px] text-purple-400 font-bold">#${p.number} [${p.pos}]</span>
-                                <p class="text-sm font-bold text-white">${p.name}</p>
+                                <p class="text-sm font-bold text-white">${p.name} <span class="text-[10px] text-slate-400">(${p.team || '京都サンガF.C.'})</span></p>
                             </div>
                         </div>
                         <div class="flex gap-2">
@@ -771,7 +879,7 @@
                 players.push({ id: newId, team, name, number, pos, goals: 0, assists: 0, birth, foot, friends, numCommit, goal, photo, careerImg, catchphrase });
             }
 
-            localStorage.setItem('club_players_v12', JSON.stringify(players));
+            localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
             resetPlayerForm();
             renderPlayerManagement();
             alert('選手データを保存しました！');
@@ -823,7 +931,7 @@
         function deletePlayer(id) {
             if (confirm('この選手を削除しますか？')) {
                 players = players.filter(x => x.id != id);
-                localStorage.setItem('club_players_v12', JSON.stringify(players));
+                localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
                 renderPlayerManagement();
             }
         }
@@ -926,10 +1034,10 @@
         function deleteMatch(index) {
             if (confirm('この試合記録を削除しますか？')) {
                 historyData.splice(index, 1);
-                localStorage.setItem('club_history_v12', JSON.stringify(historyData));
+                localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(historyData));
                 recalculatePlayerStats();
                 renderFanSite();
-                renderDedicatedHistory();
+                switchTab('history');
             }
         }
 
@@ -945,7 +1053,7 @@
                     }
                 });
             });
-            localStorage.setItem('club_players_v12', JSON.stringify(players));
+            localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
         }
 
         function handleMatchSubmit(event) {
@@ -1001,13 +1109,13 @@
                     likes: 1,
                     comments: 0
                 });
-                localStorage.setItem('club_social_v12', JSON.stringify(socialFeed));
+                localStorage.setItem('club_social_stable', JSON.stringify(socialFeed));
             }
 
             recalculatePlayerStats();
-            localStorage.setItem('club_lineup_v12', JSON.stringify(lineup));
-            localStorage.setItem('club_bench_v12', JSON.stringify(bench));
-            localStorage.setItem('club_history_v12', JSON.stringify(historyData));
+            localStorage.setItem(STORAGE_KEY_LINEUP, JSON.stringify(lineup));
+            localStorage.setItem(STORAGE_KEY_BENCH, JSON.stringify(bench));
+            localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(historyData));
 
             alert('試合データを保存しました！');
             resetMatchForm();
